@@ -433,6 +433,45 @@ svg{display:block;flex:none}
   /* ferestrele (setări, opțiuni listă) */
   .sheet{border-radius:10px}
 }
+/* ===== statistici, poze, glisare, actualizare ===== */
+.stat.click{cursor:pointer}
+.stat.click:active{transform:scale(.98)}
+.stat .sub{font-size:12px;color:var(--label2);margin-top:1px}
+.stat.more{flex:0 0 auto;color:var(--list);font-weight:600;gap:8px;padding-right:14px}
+.chart{display:flex;align-items:flex-end;gap:6px;height:170px;padding:14px 12px 0}
+.chart .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px;cursor:pointer}
+.chart .bar i{display:block;width:100%;max-width:28px;border-radius:6px 6px 3px 3px;background:color-mix(in oklab,var(--list) 35%,transparent);min-height:3px;transition:background .15s}
+.chart .bar.on i{background:var(--list)}
+.chart .bar span{font-size:11px;color:var(--label2)}
+.chart .bar.on span{color:var(--list);font-weight:700}
+.chart .bar b{font-size:10px;color:var(--label2);font-weight:500;white-space:nowrap}
+.yearnav{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 0}
+.yearnav b{font-size:17px}
+.kpis{display:flex;gap:8px;padding:12px}
+.kpis div{flex:1;background:var(--fill);border-radius:10px;padding:8px 10px}
+.kpis small{display:block;font-size:12px;color:var(--label2)}
+.kpis b{font-size:17px;font-variant-numeric:tabular-nums}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px;padding:12px}
+.photos .ph{aspect-ratio:1;border-radius:10px;background:var(--fill) center/cover no-repeat;cursor:pointer;position:relative}
+.photos .ph.up::after{content:"";position:absolute;right:5px;bottom:5px;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.photos .add{aspect-ratio:1;border-radius:10px;border:1.5px dashed var(--label3);display:grid;place-items:center;color:var(--accent)}
+.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.92);display:flex;flex-direction:column;animation:fade .2s both}
+.viewer .vt{display:flex;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.viewer .vt button{color:#fff;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.viewer .vt button.armed{background:var(--red)}
+.viewer img{flex:1;min-height:0;object-fit:contain;width:100%;padding:0 8px calc(16px + env(safe-area-inset-bottom))}
+.irow .sw-ic{position:absolute;top:0;bottom:0;display:grid;place-items:center;width:70px;color:#fff;opacity:.6;transition:opacity .15s}
+.irow.swiping.armed .sw-ic{opacity:1}
+.irow.swiping{background:var(--swbg)!important}
+.irow.swiping > :not(.sw-ic){transform:translateX(var(--dx));transition:none}
+.irow > *{transition:transform .22s var(--ease)}
+.irow.lifted{z-index:5;transform:translateY(var(--dy)) scale(1.02);box-shadow:0 10px 30px rgba(0,0,0,.2);transition:none;border-radius:12px}
+.irow.drop-before{box-shadow:inset 0 2px 0 var(--list)} .irow.drop-after{box-shadow:inset 0 -2px 0 var(--list)}
+#updBar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:65;display:flex;align-items:center;gap:14px;
+  background:var(--accent);color:#fff;border-radius:22px;padding:8px 8px 8px 16px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);white-space:nowrap;animation:tin .3s var(--ease) both}
+#updBar button{background:#fff;color:var(--accent);border-radius:16px;padding:6px 12px;font-weight:700;font-size:13.5px}
+@media (min-width:761px){ #updBar{bottom:24px} }
+
 /* ===== ecrane tactile: fără efecte de mouse rămase după atingere ===== */
 @media (hover:none){
   .irow:hover,.lrow:hover,.kind:hover{background:var(--cell)}
@@ -533,8 +572,9 @@ svg{display:block;flex:none}
    Date locale + sincronizare opțională într-un repository GitHub privat.
    Pictograme: Lucide (licență ISC).  © Paul Chirilă */
 
-const ICONS = {"wallet":"<path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/> <path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/>","receipt":"<path d=\"M12 17V7\"/> <path d=\"M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8\"/> <path d=\"M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z\"/>","card":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"5\" rx=\"2\"/> <line x1=\"2\" x2=\"22\" y1=\"10\" y2=\"10\"/> <path d=\"M6 14h2\"/>","bank":"<path d=\"M10 18v-7\"/> <path d=\"M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z\"/> <path d=\"M14 18v-7\"/> <path d=\"M18 18v-7\"/> <path d=\"M3 22h18\"/> <path d=\"M6 18v-7\"/>","car":"<path d=\"M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2\"/> <circle cx=\"7\" cy=\"17\" r=\"2\"/> <path d=\"M9 17h6\"/> <circle cx=\"17\" cy=\"17\" r=\"2\"/>","wrench":"<path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z\"/>","fuel":"<path d=\"M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5\"/> <path d=\"M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16\"/> <path d=\"M2 21h13\"/> <path d=\"M3 9h11\"/>","palm":"<path d=\"M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4\"/> <path d=\"M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3\"/> <path d=\"M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35\"/> <path d=\"M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14\"/>","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\"/>","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\"/> <path d=\"M8 10h8\"/> <path d=\"M8 18h8\"/> <path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\"/> <path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\"/>","luggage":"<path d=\"M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2\"/> <path d=\"M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14\"/> <path d=\"M10 20h4\"/> <circle cx=\"16\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","cart":"<path d=\"m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18\"/> <path d=\"M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25\"/> <circle cx=\"18\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","house":"<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/> <path d=\"M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>","gift":"<path d=\"M12 7v14\"/> <path d=\"M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\"/> <path d=\"M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5\"/> <rect x=\"3\" y=\"7\" width=\"18\" height=\"4\" rx=\"1\"/>","book":"<path d=\"M12 5v16\"/> <path d=\"M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z\"/>","laptop":"<path d=\"M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z\"/> <path d=\"M20.054 15.987H3.946\"/>","note":"<path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\"/> <path d=\"M2 6h4\"/> <path d=\"M2 10h4\"/> <path d=\"M2 14h4\"/> <path d=\"M2 18h4\"/> <path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\"/>","pin":"<path d=\"M12 17v5\"/> <path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","heart":"<path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/>","paw":"<circle cx=\"11\" cy=\"4\" r=\"2\"/> <circle cx=\"18\" cy=\"8\" r=\"2\"/> <circle cx=\"20\" cy=\"16\" r=\"2\"/> <path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\"/>","leaf":"<path d=\"M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20\"/> <path d=\"M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13\"/>","food":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"/> <path d=\"M7 2v20\"/> <path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"/>","gym":"<path d=\"M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z\"/> <path d=\"m2.5 21.5 1.4-1.4\"/> <path d=\"m20.1 3.9 1.4-1.4\"/> <path d=\"M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z\"/> <path d=\"m9.6 14.4 4.8-4.8\"/>","game":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\"/> <line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\"/> <line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\"/> <line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\"/> <path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\"/>","music":"<path d=\"M21 16V3a1 1 0 0 0-1.28-.96l-10 2.917a1 1 0 0 0-.72.96V19\"/> <circle cx=\"18\" cy=\"16\" r=\"3\"/> <circle cx=\"6\" cy=\"19\" r=\"3\"/>","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\"/>","bulb":"<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"/> <path d=\"M9 18h6\"/> <path d=\"M10 22h4\"/>","box":"<path d=\"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z\"/> <path d=\"M12 22V12\"/> <polyline points=\"3.29 7 12 12 20.71 7\"/> <path d=\"m7.5 4.27 9 5.15\"/>","school":"<path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"/> <path d=\"M22 10v6\"/> <path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"/>","baby":"<path d=\"M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5\"/> <path d=\"M15 12h.01\"/> <path d=\"M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1\"/> <path d=\"M9 12h.01\"/>","work":"<path d=\"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"/> <rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"/>","tools":"<path d=\"m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9\"/> <path d=\"m18 15 4-4\"/> <path d=\"m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5\"/>","list":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <path d=\"m3 7 2 2 4-4\"/>","ui-back":"<path d=\"m15 18-6-6 6-6\"/>","ui-chev":"<path d=\"m9 18 6-6-6-6\"/>","ui-down":"<path d=\"m6 9 6 6 6-6\"/>","ui-plus":"<path d=\"M5 12h14\"/> <path d=\"M12 5v14\"/>","ui-more":"<circle cx=\"12\" cy=\"12\" r=\"1\"/> <circle cx=\"19\" cy=\"12\" r=\"1\"/> <circle cx=\"5\" cy=\"12\" r=\"1\"/>","ui-settings":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>","ui-cal":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/>","ui-repeat":"<path d=\"m17 2 4 4-4 4\"/> <path d=\"M3 11v-1a4 4 0 0 1 4-4h14\"/> <path d=\"m7 22-4-4 4-4\"/> <path d=\"M21 13v1a4 4 0 0 1-4 4H3\"/>","ui-noteline":"<path d=\"M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z\"/> <path d=\"M15 3v5a1 1 0 0 0 1 1h5\"/>","ui-km":"<path d=\"m12 14 4-4\"/> <path d=\"M3.34 19a10 10 0 1 1 17.32 0\"/>","ui-money":"<rect width=\"20\" height=\"12\" x=\"2\" y=\"6\" rx=\"2\"/> <circle cx=\"12\" cy=\"12\" r=\"2\"/> <path d=\"M6 12h.01M18 12h.01\"/>","ui-x":"<path d=\"M18 6 6 18\"/> <path d=\"m6 6 12 12\"/>","ui-check":"<path d=\"M20 6 9 17l-5-5\"/>","ui-sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-moon":"<path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/>","ui-monitor":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\"/> <line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\"/> <line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\"/>","ui-inbox":"<polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/> <path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/>","ui-done":"<path d=\"M21.801 10A10 10 0 1 1 17 3.335\"/> <path d=\"m9 11 3 3L22 4\"/>","ui-up":"<path d=\"m5 12 7-7 7 7\"/> <path d=\"M12 19V5\"/>","ui-trash":"<path d=\"M10 11v6\"/> <path d=\"M14 11v6\"/> <path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6\"/> <path d=\"M3 6h18\"/> <path d=\"M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"/>","ui-today":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m9 15 2 2 4-4\"/>","ui-cloud":"<path d=\"M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z\"/>","ui-download":"<path d=\"M12 15V3\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/> <path d=\"m7 10 5 5 5-5\"/>","ui-upload":"<path d=\"M12 3v12\"/> <path d=\"m17 8-5-5-5 5\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/>","camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","phone":"<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\" ry=\"2\"/> <path d=\"M12 18h.01\"/>","ui-panel":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M9 3v18\"/>","ui-star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","ui-myday":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-flag":"<path d=\"M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528\"/>","ui-steps":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <rect x=\"3\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"/>","ui-plusc":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"M8 12h8\"/> <path d=\"M12 8v8\"/>","ui-close":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M15 3v18\"/> <path d=\"m8 9 3 3-3 3\"/>","ui-folder":"<path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderplus":"<path d=\"M12 10v6\"/> <path d=\"M9 13h6\"/> <path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderopen":"<path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"/>","ui-search":"<path d=\"m21 21-4.34-4.34\"/> <circle cx=\"11\" cy=\"11\" r=\"8\"/>","ui-calx":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m14 13-4 4\"/> <path d=\"m10 13 4 4\"/>","ui-calclock":"<path d=\"M16 14v2.2l1.6 1\"/> <path d=\"M16 2v3\"/> <path d=\"M21 7.338V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2.338\"/> <path d=\"M3 9h5.859\"/> <path d=\"M8 2v3\"/> <circle cx=\"16\" cy=\"16\" r=\"6\"/>","ui-pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\"/> <path d=\"m15 5 4 4\"/>","ui-undo":"<path d=\"M9 14 4 9l5-5\"/> <path d=\"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11\"/>","ui-move":"<path d=\"m16 3 4 4-4 4\"/> <path d=\"M20 7H4\"/> <path d=\"m8 21-4-4 4-4\"/> <path d=\"M4 17h16\"/>","ui-circlecheck":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"m16 9-5.5 5.5L8 12\"/>","ui-gear":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>"};
+const ICONS = {"wallet":"<path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/> <path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/>","receipt":"<path d=\"M12 17V7\"/> <path d=\"M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8\"/> <path d=\"M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z\"/>","card":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"5\" rx=\"2\"/> <line x1=\"2\" x2=\"22\" y1=\"10\" y2=\"10\"/> <path d=\"M6 14h2\"/>","bank":"<path d=\"M10 18v-7\"/> <path d=\"M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z\"/> <path d=\"M14 18v-7\"/> <path d=\"M18 18v-7\"/> <path d=\"M3 22h18\"/> <path d=\"M6 18v-7\"/>","car":"<path d=\"M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2\"/> <circle cx=\"7\" cy=\"17\" r=\"2\"/> <path d=\"M9 17h6\"/> <circle cx=\"17\" cy=\"17\" r=\"2\"/>","wrench":"<path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z\"/>","fuel":"<path d=\"M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5\"/> <path d=\"M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16\"/> <path d=\"M2 21h13\"/> <path d=\"M3 9h11\"/>","palm":"<path d=\"M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4\"/> <path d=\"M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3\"/> <path d=\"M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35\"/> <path d=\"M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14\"/>","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\"/>","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\"/> <path d=\"M8 10h8\"/> <path d=\"M8 18h8\"/> <path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\"/> <path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\"/>","luggage":"<path d=\"M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2\"/> <path d=\"M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14\"/> <path d=\"M10 20h4\"/> <circle cx=\"16\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","cart":"<path d=\"m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18\"/> <path d=\"M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25\"/> <circle cx=\"18\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","house":"<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/> <path d=\"M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>","gift":"<path d=\"M12 7v14\"/> <path d=\"M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\"/> <path d=\"M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5\"/> <rect x=\"3\" y=\"7\" width=\"18\" height=\"4\" rx=\"1\"/>","book":"<path d=\"M12 5v16\"/> <path d=\"M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z\"/>","laptop":"<path d=\"M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z\"/> <path d=\"M20.054 15.987H3.946\"/>","note":"<path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\"/> <path d=\"M2 6h4\"/> <path d=\"M2 10h4\"/> <path d=\"M2 14h4\"/> <path d=\"M2 18h4\"/> <path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\"/>","pin":"<path d=\"M12 17v5\"/> <path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","heart":"<path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/>","paw":"<circle cx=\"11\" cy=\"4\" r=\"2\"/> <circle cx=\"18\" cy=\"8\" r=\"2\"/> <circle cx=\"20\" cy=\"16\" r=\"2\"/> <path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\"/>","leaf":"<path d=\"M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20\"/> <path d=\"M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13\"/>","food":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"/> <path d=\"M7 2v20\"/> <path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"/>","gym":"<path d=\"M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z\"/> <path d=\"m2.5 21.5 1.4-1.4\"/> <path d=\"m20.1 3.9 1.4-1.4\"/> <path d=\"M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z\"/> <path d=\"m9.6 14.4 4.8-4.8\"/>","game":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\"/> <line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\"/> <line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\"/> <line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\"/> <path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\"/>","music":"<path d=\"M21 16V3a1 1 0 0 0-1.28-.96l-10 2.917a1 1 0 0 0-.72.96V19\"/> <circle cx=\"18\" cy=\"16\" r=\"3\"/> <circle cx=\"6\" cy=\"19\" r=\"3\"/>","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\"/>","bulb":"<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"/> <path d=\"M9 18h6\"/> <path d=\"M10 22h4\"/>","box":"<path d=\"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z\"/> <path d=\"M12 22V12\"/> <polyline points=\"3.29 7 12 12 20.71 7\"/> <path d=\"m7.5 4.27 9 5.15\"/>","school":"<path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"/> <path d=\"M22 10v6\"/> <path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"/>","baby":"<path d=\"M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5\"/> <path d=\"M15 12h.01\"/> <path d=\"M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1\"/> <path d=\"M9 12h.01\"/>","work":"<path d=\"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"/> <rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"/>","tools":"<path d=\"m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9\"/> <path d=\"m18 15 4-4\"/> <path d=\"m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5\"/>","list":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <path d=\"m3 7 2 2 4-4\"/>","ui-back":"<path d=\"m15 18-6-6 6-6\"/>","ui-chev":"<path d=\"m9 18 6-6-6-6\"/>","ui-down":"<path d=\"m6 9 6 6 6-6\"/>","ui-plus":"<path d=\"M5 12h14\"/> <path d=\"M12 5v14\"/>","ui-more":"<circle cx=\"12\" cy=\"12\" r=\"1\"/> <circle cx=\"19\" cy=\"12\" r=\"1\"/> <circle cx=\"5\" cy=\"12\" r=\"1\"/>","ui-settings":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>","ui-cal":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/>","ui-repeat":"<path d=\"m17 2 4 4-4 4\"/> <path d=\"M3 11v-1a4 4 0 0 1 4-4h14\"/> <path d=\"m7 22-4-4 4-4\"/> <path d=\"M21 13v1a4 4 0 0 1-4 4H3\"/>","ui-noteline":"<path d=\"M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z\"/> <path d=\"M15 3v5a1 1 0 0 0 1 1h5\"/>","ui-km":"<path d=\"m12 14 4-4\"/> <path d=\"M3.34 19a10 10 0 1 1 17.32 0\"/>","ui-money":"<rect width=\"20\" height=\"12\" x=\"2\" y=\"6\" rx=\"2\"/> <circle cx=\"12\" cy=\"12\" r=\"2\"/> <path d=\"M6 12h.01M18 12h.01\"/>","ui-x":"<path d=\"M18 6 6 18\"/> <path d=\"m6 6 12 12\"/>","ui-check":"<path d=\"M20 6 9 17l-5-5\"/>","ui-sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-moon":"<path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/>","ui-monitor":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\"/> <line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\"/> <line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\"/>","ui-inbox":"<polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/> <path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/>","ui-done":"<path d=\"M21.801 10A10 10 0 1 1 17 3.335\"/> <path d=\"m9 11 3 3L22 4\"/>","ui-up":"<path d=\"m5 12 7-7 7 7\"/> <path d=\"M12 19V5\"/>","ui-trash":"<path d=\"M10 11v6\"/> <path d=\"M14 11v6\"/> <path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6\"/> <path d=\"M3 6h18\"/> <path d=\"M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"/>","ui-today":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m9 15 2 2 4-4\"/>","ui-cloud":"<path d=\"M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z\"/>","ui-download":"<path d=\"M12 15V3\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/> <path d=\"m7 10 5 5 5-5\"/>","ui-upload":"<path d=\"M12 3v12\"/> <path d=\"m17 8-5-5-5 5\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/>","camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","phone":"<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\" ry=\"2\"/> <path d=\"M12 18h.01\"/>","ui-panel":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M9 3v18\"/>","ui-star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","ui-myday":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-flag":"<path d=\"M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528\"/>","ui-steps":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <rect x=\"3\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"/>","ui-plusc":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"M8 12h8\"/> <path d=\"M12 8v8\"/>","ui-close":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M15 3v18\"/> <path d=\"m8 9 3 3-3 3\"/>","ui-folder":"<path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderplus":"<path d=\"M12 10v6\"/> <path d=\"M9 13h6\"/> <path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderopen":"<path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"/>","ui-search":"<path d=\"m21 21-4.34-4.34\"/> <circle cx=\"11\" cy=\"11\" r=\"8\"/>","ui-calx":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m14 13-4 4\"/> <path d=\"m10 13 4 4\"/>","ui-calclock":"<path d=\"M16 14v2.2l1.6 1\"/> <path d=\"M16 2v3\"/> <path d=\"M21 7.338V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2.338\"/> <path d=\"M3 9h5.859\"/> <path d=\"M8 2v3\"/> <circle cx=\"16\" cy=\"16\" r=\"6\"/>","ui-pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\"/> <path d=\"m15 5 4 4\"/>","ui-undo":"<path d=\"M9 14 4 9l5-5\"/> <path d=\"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11\"/>","ui-move":"<path d=\"m16 3 4 4-4 4\"/> <path d=\"M20 7H4\"/> <path d=\"m8 21-4-4 4-4\"/> <path d=\"M4 17h16\"/>","ui-circlecheck":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"m16 9-5.5 5.5L8 12\"/>","ui-gear":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>","ui-chart":"<path d=\"M3 3v16a2 2 0 0 0 2 2h16\"/> <path d=\"M18 17V9\"/> <path d=\"M13 17V5\"/> <path d=\"M8 17v-3\"/>","ui-excel":"<path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\"/> <path d=\"M14 2v5a1 1 0 0 0 1 1h5\"/> <path d=\"M8 13h2\"/> <path d=\"M14 13h2\"/> <path d=\"M8 17h2\"/> <path d=\"M14 17h2\"/>","ui-camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","ui-imgplus":"<path d=\"M16 5h6\"/> <path d=\"M19 2v6\"/> <path d=\"M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5\"/> <path d=\"m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21\"/> <circle cx=\"9\" cy=\"9\" r=\"2\"/>","ui-wrench":"<path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z\"/>"};
 const APP = 'Bifa';
+const VERSION = '20261119223249';
 const $ = s => document.querySelector(s);
 const LS_DATA = 'liste.data.v1', LS_CFG = 'liste.cfg.v1', LS_UI = 'liste.ui.v3';
 const FILE = 'liste.json';
@@ -772,11 +812,15 @@ function render() {
       stats.push(['Cheltuit anul acesta', money(done.filter(i => new Date(i.doneAt || 0).getFullYear() === y).reduce((s, i) => s + (i.amount || 0), 0)), 'ui-money']);
     }
     if (L.km) {
-      const kms = items.map(i => i.km).filter(n => n != null);
+      const kms = items.filter(i => !i.nextRev).map(i => i.km).filter(n => n != null);
       if (kms.length) stats.push(['Ultimul kilometraj', kmFmt(Math.max(...kms)), 'ui-km']);
+      const n = nextRevision(L);
+      if (n) stats.push(['Următoarea revizie', kmFmt(n.km), 'ui-wrench', `sau în ${n.label}`, 'nextrev']);
     }
   }
-  $('#totals').innerHTML = stats.length ? `<div class="stats">${stats.map(([l, v, icn]) => `<div class="stat"><span class="si">${ic(icn, 17, 2.2)}</span><div><div class="l">${l}</div><b>${v}</b></div></div>`).join('')}</div>` : '';
+  const statsHtml = stats.map(([l, v, icn, sub, act]) => `<div class="stat ${act ? 'click' : ''}" ${act ? `data-act="${act}"` : ''}><span class="si">${ic(icn, 17, 2.2)}</span><div><div class="l">${l}</div><b>${v}</b>${sub ? `<div class="sub">${sub}</div>` : ''}</div></div>`).join('')
+    + (L.money && ui.show.totals ? `<button class="stat click more" data-act="stats">${ic('ui-chart', 18, 2.2)}Statistici</button>` : '');
+  $('#totals').innerHTML = statsHtml ? `<div class="stats">${statsHtml}</div>` : '';
 
   let html = open.length ? `<div class="group">${open.map(i => row(i, L)).join('')}</div>`
     : `<div class="empty">${badge(L, '', 30)}<b>${done.length ? 'Totul e bifat' : 'Lista e goală'}</b>${done.length ? 'Bravo!' : 'Apasă pe + pentru primul element.'}
@@ -907,6 +951,7 @@ function row(i, L, showList) {
     d && !plain ? `<span class="${d.cls}">${ic('ui-cal', 13, 2.2)}${esc(d.label)}</span>` : '',
     i.repeat && !i.done && !plain ? `<span>${ic('ui-repeat', 13, 2.2)}${REPEATS[i.repeat] || 'Lunar'}</span>` : '',
     L.km && i.km != null ? `<span>${ic('ui-km', 13, 2.2)}${kmFmt(i.km)}</span>` : '',
+    (i.photos || []).length ? `<span>${ic('ui-camera', 13, 2.2)}${i.photos.length}</span>` : '',
     i.note ? `<span>${ic('ui-noteline', 13, 2.2)}${esc(i.note.split('\n')[0].slice(0, 50))}</span>` : ''
   ].filter(Boolean).join('');
   const drag = !showList && !isSmart(ui.current) && !query && !(i.done && !plain);
@@ -916,6 +961,177 @@ function row(i, L, showList) {
     ${L.money && i.amount != null ? `<div class="amt">${money(i.amount)}</div>` : ''}
     ${plain ? '' : `<button class="star ${i.star ? 'on' : ''}" data-star="${esc(i.id)}" aria-label="Important">${ic('ui-star', 18, 2)}</button>`}
   </div>`;
+}
+
+/* ---------- versiune nouă disponibilă ---------- */
+async function checkUpdate() {
+  if (location.protocol !== 'https:' || document.getElementById('updBar')) return;
+  try {
+    const r = await fetch('version.json?t=' + now(), { cache:'no-store' }); if (!r.ok) return;
+    const j = await r.json();
+    if (j.v && j.v !== VERSION) {
+      const b = document.createElement('div'); b.id = 'updBar';
+      b.innerHTML = `<span>Versiune nouă disponibilă</span><button>Actualizează</button>`;
+      document.body.appendChild(b);
+      b.querySelector('button').onclick = async () => {
+        try { const ks = await caches.keys(); await Promise.all(ks.map(k => caches.delete(k))); } catch {}
+        location.reload();
+      };
+    }
+  } catch {}
+}
+
+/* ---------- statistici pe luni (liste cu sume) ---------- */
+const MON3 = ['ian','feb','mar','apr','mai','iun','iul','aug','sep','oct','noi','dec'];
+function openStats(listId) {
+  const L = db.lists[listId]; if (!L) return;
+  let year = new Date().getFullYear(), month = new Date().getMonth();
+  openSheet(`${shHead('Statistici · ' + esc(L.name), 'Gata', '')}<div class="sh-body" id="stBody" style="--list:${listColor(L)}"></div>`, s => {
+    s.querySelector('#ok').onclick = () => closeSheet();
+    const draw = () => {
+      const paid = itemsOf(listId).filter(i => i.done && i.amount != null && i.doneAt);
+      const inYear = paid.filter(i => new Date(i.doneAt).getFullYear() === year);
+      const per = Array.from({ length:12 }, (_, m) => inYear.filter(i => new Date(i.doneAt).getMonth() === m).reduce((a, i) => a + i.amount, 0));
+      const max = Math.max(1, ...per), total = per.reduce((a, b) => a + b, 0);
+      const monthsWith = per.filter(v => v > 0).length;
+      const inMonth = inYear.filter(i => new Date(i.doneAt).getMonth() === month).sort((a, b) => b.doneAt - a.doneAt);
+      const years = [...new Set(paid.map(i => new Date(i.doneAt).getFullYear()))];
+      const short = v => v >= 1000 ? (Math.round(v / 100) / 10).toString().replace('.', ',') + 'k' : Math.round(v);
+      s.querySelector('#stBody').innerHTML = `
+        <div class="fgroup">
+          <div class="yearnav"><button class="sh-btn" id="yPrev" ${years.some(y => y < year) ? '' : 'disabled'}>${ic('ui-back', 22, 2.4)}</button><b>${year}</b>
+            <button class="sh-btn" id="yNext" ${year < new Date().getFullYear() ? '' : 'disabled'} style="transform:scaleX(-1)">${ic('ui-back', 22, 2.4)}</button></div>
+          <div class="chart">${per.map((v, m) => `<div class="bar ${m === month ? 'on' : ''}" data-m="${m}"><b>${v ? short(v) : ''}</b><i style="height:${Math.round(v / max * 100)}%"></i><span>${MON3[m]}</span></div>`).join('')}</div>
+          <div class="kpis"><div><small>Total ${year}</small><b>${money(total)}</b></div><div><small>Medie pe lună</small><b>${money(monthsWith ? Math.round(total / monthsWith) : 0)}</b></div></div>
+        </div>
+        <div class="fh">${MONTHS[month][0].toUpperCase() + MONTHS[month].slice(1)} ${year} · ${money(per[month])}</div>
+        <div class="fgroup">${inMonth.length ? inMonth.map(i => `<div class="frow"><span class="fl">${esc(i.title)}<small>${new Date(i.doneAt).toLocaleDateString('ro-RO', { day:'numeric', month:'long' })}</small></span><span style="font-variant-numeric:tabular-nums">${money(i.amount)}</span></div>`).join('')
+          : '<div class="frow" style="color:var(--label2)">Nicio plată bifată în luna aceasta</div>'}</div>
+        <div class="ff">Se adună elementele bifate (plătite), după data la care au fost bifate.</div>
+        <div class="fgroup"><div class="frow btnrow" id="stExport">${ic('ui-excel', 18, 2)}&nbsp;Exportă lista în Excel</div></div>`;
+      s.querySelectorAll('.bar').forEach(b => b.onclick = () => { month = +b.dataset.m; draw(); });
+      s.querySelector('#yPrev').onclick = () => { year--; draw(); };
+      s.querySelector('#yNext').onclick = () => { year++; draw(); };
+      s.querySelector('#stExport').onclick = () => exportCSV([listId]);
+    };
+    draw();
+  });
+}
+
+/* ---------- export pentru Excel (CSV cu ; și virgulă zecimală) ---------- */
+function exportCSV(listIds) {
+  const ids = listIds || liveLists().map(l => l.id);
+  const q = v => { v = v == null ? '' : String(v); return /[;"\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const num = n => n == null ? '' : String(n).replace('.', ',');
+  const d = s => s ? s.split('-').reverse().join('.') : '';
+  const rows = [['Listă', 'Titlu', 'Sumă (lei)', 'Kilometraj', 'Stare', 'Data bifării', 'Dată limită', 'Notă']];
+  for (const id of ids) {
+    const L = db.lists[id];
+    itemsOf(id).sort((a, b) => (a.done - b.done) || (ord(a) - ord(b))).forEach(i => rows.push([
+      L.name, i.title, num(i.amount), num(i.km), isPlain(L) ? '' : i.done ? 'Finalizat' : 'De făcut',
+      i.doneAt ? new Date(i.doneAt).toLocaleDateString('ro-RO') : '', d(i.due), (i.note || '').replace(/\n/g, ' ')]));
+  }
+  const csv = '\uFEFF' + rows.map(r => r.map(q).join(';')).join('\r\n');
+  const name = ids.length === 1 ? db.lists[ids[0]].name : 'toate-listele';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
+  a.download = `${APP.toLowerCase()}-${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}-${todayStr()}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+}
+
+/* ---------- următoarea revizie (liste cu kilometraj) ---------- */
+function titleDate(t) {
+  let m = /(\d{1,2})\.(\d{1,2})\.(\d{4})/.exec(t || ''); if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  m = /(?:^|\D)(\d{1,2})\.(\d{4})/.exec(t || ''); if (m) return `${m[2]}-${m[1].padStart(2, '0')}-01`;
+  return '';
+}
+function nextRevision(L) {
+  const all = itemsOf(L.id);
+  const recs = all.filter(i => i.km != null && !i.nextRev); if (!recs.length) return null;
+  const last = recs.reduce((a, b) => (b.km > a.km ? b : a));
+  const lastDate = last.due || titleDate(last.title) || (last.doneAt ? ymd(new Date(last.doneAt)) : ymd(new Date(last.createdAt)));
+  const [y, m, d] = lastDate.split('-').map(Number);
+  const months = L.revMonths ?? 12, kmStep = L.revKm ?? 15000;
+  const dt = new Date(y, m - 1 + months, Math.min(d, 28));
+  return { km: last.km + kmStep, due: ymd(dt), label: dt.toLocaleDateString('ro-RO', { month:'long', year:'numeric' }),
+           pending: all.find(i => i.nextRev && !i.done) };
+}
+function planRevision(listId) {
+  const L = db.lists[listId], n = nextRevision(L); if (!n) return;
+  if (n.pending) return editItem(n.pending.id);
+  const id = uid(), ts = now();
+  db.items[id] = { id, listId, title:'Următoarea revizie', note:'', amount:null, km:n.km, due:n.due, repeat:'', star:false, myDay:'', steps:[],
+                   nextRev:true, done:false, doneAt:null, order:ts, createdAt:ts, updatedAt:ts };
+  commit(); toast(`Adăugată în Planificate: ${n.label}, sau la ${kmFmt(n.km)}`);
+}
+
+/* ---------- poze atașate ----------
+   Pozele se micșorează (max. 1600 px, JPEG) și se păstrează pe dispozitiv; cu sincronizarea activă
+   se urcă și în repository-ul de date, în folderul „poze”, ca să apară pe toate dispozitivele. */
+const idb = (() => {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((res, rej) => { const r = indexedDB.open('bifa-poze', 1); r.onupgradeneeded = () => r.result.createObjectStore('p'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
+  const tx = async (mode, fn) => { const d = await open(); return new Promise((res, rej) => { const t = d.transaction('p', mode); const r = fn(t.objectStore('p')); t.oncomplete = () => res(r && r.result); t.onerror = () => rej(t.error); }); };
+  return { get:k => tx('readonly', s => s.get(k)), put:(k, v) => tx('readwrite', s => s.put(v, k)), del:k => tx('readwrite', s => s.delete(k)) };
+})();
+async function shrink(file) {
+  const bmp = await createImageBitmap(file);
+  const sc = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas'); c.width = Math.round(bmp.width * sc); c.height = Math.round(bmp.height * sc);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  return new Promise(r => c.toBlob(r, 'image/jpeg', .82));
+}
+const blobB64 = b => new Promise(r => { const f = new FileReader(); f.onload = () => r(String(f.result).split(',')[1]); f.readAsDataURL(b); });
+const photoUrl = p => `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/poze/${p.id}.jpg`;
+async function uploadPhoto(item, p) {
+  if (!cfg.token || p.up) return;
+  const blob = await idb.get(p.id); if (!blob) return;
+  const r = await fetch(photoUrl(p), { method:'PUT', headers:{ ...ghHeaders(cfg.token), 'Content-Type':'application/json' },
+    body:JSON.stringify({ message:'Poză: ' + item.title.slice(0, 50), content:await blobB64(blob) }) });
+  if (r.ok || r.status === 422) { p.up = true; item.updatedAt = now(); store(LS_DATA, db); scheduleSync(); }
+}
+async function uploadPending() {
+  for (const i of liveItems()) for (const p of (i.photos || [])) if (!p.up) { try { await uploadPhoto(i, p); } catch {} }
+}
+const urlCache = {};
+async function photoSrc(p) {
+  if (urlCache[p.id]) return urlCache[p.id];
+  let b = await idb.get(p.id).catch(() => null);
+  if (!b && cfg.token && p.up) {
+    const r = await fetch(photoUrl(p) + '?t=' + now(), { headers:{ ...ghHeaders(cfg.token), 'Accept':'application/vnd.github.raw' }, cache:'no-store' });
+    if (r.ok) { b = await r.blob(); idb.put(p.id, b).catch(() => {}); }
+  }
+  return b ? (urlCache[p.id] = URL.createObjectURL(b)) : '';
+}
+async function addPhotos(item, files) {
+  item.photos = item.photos || [];
+  for (const f of files) {
+    try {
+      const blob = await shrink(f); const p = { id:uid() };
+      await idb.put(p.id, blob); item.photos.push(p);
+      touchItem(item); refreshDetail();
+      uploadPhoto(item, p).then(refreshDetail).catch(() => {});
+    } catch { toast('Poza nu a putut fi citită'); }
+  }
+}
+async function removePhoto(item, pid) {
+  const p = (item.photos || []).find(x => x.id === pid); if (!p) return;
+  item.photos = item.photos.filter(x => x.id !== pid); touchItem(item); refreshDetail();
+  idb.del(pid).catch(() => {});
+  if (cfg.token && p.up) try {
+    const g = await fetch(photoUrl(p), { headers:ghHeaders(cfg.token), cache:'no-store' });
+    if (g.ok) { const { sha } = await g.json();
+      await fetch(photoUrl(p), { method:'DELETE', headers:{ ...ghHeaders(cfg.token), 'Content-Type':'application/json' }, body:JSON.stringify({ message:'Poză ștearsă', sha }) }); }
+  } catch {}
+}
+async function viewPhoto(item, pid) {
+  const v = document.createElement('div'); v.className = 'viewer';
+  v.innerHTML = `<div class="vt"><button id="vX">${ic('ui-x', 20, 2.4)}</button><button id="vDel">${ic('ui-trash', 19, 2.2)}</button></div><img alt="">`;
+  document.body.appendChild(v);
+  v.querySelector('img').src = await photoSrc(item.photos.find(x => x.id === pid));
+  const close = () => v.remove();
+  v.querySelector('#vX').onclick = close;
+  armed(v.querySelector('#vDel'), () => { close(); removePhoto(item, pid); });
 }
 
 /* ---------- meniu contextual (clic dreapta) ---------- */
@@ -975,6 +1191,8 @@ function listMenu(id, x, y) {
   const groups = liveGroups();
   showMenu(x, y, [
     { icon:'ui-pencil', label:'Opțiuni listă…', run:() => editList(id) },
+    ...(l.money ? [{ icon:'ui-chart', label:'Statistici', run:() => openStats(id) }] : []),
+    { icon:'ui-excel', label:'Exportă în Excel', run:() => exportCSV([id]) },
     ...(groups.length ? [{ icon:'ui-folder', label:'Mută în grup…', keep:true, run:() => showMenu(x, y, [{ hd:'Grup' },
       { icon:'ui-x', label:'Fără grup', run:() => { l.group = ''; l.updatedAt = now(); commit(); } },
       ...groups.map(g => ({ icon:'ui-folder', label:g.name, run:() => { l.group = g.id; l.updatedAt = now(); ui.groupOpen[g.id] = true; saveUI(); commit(); } }))]) }] : []),
@@ -1011,6 +1229,84 @@ function editGroup(id) {
       s.querySelector('#ok').onclick = ok; inp.onkeydown = e => { if (e.key === 'Enter') ok(); };
     });
 }
+
+/* ---------- gesturi pe ecran tactil ----------
+   glisare spre dreapta = bifat, spre stânga = șters (cu „Anulează”);
+   ținere apăsat ~0,4 s, apoi tragere = schimbarea ordinii */
+let suppressClick = false;
+(() => {
+  const box = $('#items');
+  let st = null;
+  const reset = () => {
+    if (!st) return;
+    const r = st.row;
+    r.classList.remove('swiping', 'armed', 'lifted'); r.style.removeProperty('--dx'); r.style.removeProperty('--dy'); r.style.removeProperty('--swbg');
+    r.querySelector('.sw-ic')?.remove();
+    box.querySelectorAll('.drop-before,.drop-after').forEach(x => x.classList.remove('drop-before', 'drop-after'));
+    clearTimeout(st.lp); st = null;
+  };
+  box.addEventListener('touchstart', e => {
+    if (isDesk() || e.touches.length > 1) return;
+    const row = e.target.closest('.irow'); if (!row) return;
+    const t = e.touches[0];
+    st = { row, x:t.clientX, y:t.clientY, mode:null };
+    if (row.getAttribute('draggable') === 'true')
+      st.lp = setTimeout(() => { if (st && !st.mode) { st.mode = 'drag'; row.classList.add('lifted'); navigator.vibrate?.(8); } }, 420);
+  }, { passive:true });
+  box.addEventListener('touchmove', e => {
+    if (!st) return;
+    const t = e.touches[0], dx = t.clientX - st.x, dy = t.clientY - st.y;
+    if (!st.mode) {
+      if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+        const it = db.items[st.row.dataset.item], L = it && db.lists[it.listId];
+        st.mode = 'swipe'; st.plain = isPlain(L); clearTimeout(st.lp);
+      } else if (Math.abs(dy) > 10) { clearTimeout(st.lp); st = null; return; }
+      else return;
+    }
+    e.preventDefault();
+    const r = st.row;
+    if (st.mode === 'swipe') {
+      const d = st.plain ? Math.min(0, dx) : dx;
+      r.classList.add('swiping'); r.style.setProperty('--dx', d + 'px');
+      const right = d > 0;
+      r.style.setProperty('--swbg', right ? '#34c759' : 'var(--red)');
+      let icn = r.querySelector('.sw-ic');
+      if (!icn) { icn = document.createElement('span'); icn.className = 'sw-ic'; r.appendChild(icn); }
+      icn.style.left = right ? '0' : ''; icn.style.right = right ? '' : '0';
+      icn.innerHTML = right ? ic('ui-check', 24, 2.8) : ic('ui-trash', 22, 2.2);
+      r.classList.toggle('armed', Math.abs(d) > 90);
+      st.dx = d;
+    } else if (st.mode === 'drag') {
+      r.style.setProperty('--dy', dy + 'px');
+      const rows = [...box.querySelectorAll('.irow[draggable=true]')].filter(x => x !== r);
+      rows.forEach(x => x.classList.remove('drop-before', 'drop-after'));
+      const y = t.clientY; let target = null, before = true;
+      for (const x of rows) { const b = x.getBoundingClientRect(); if (y < b.top + b.height / 2) { target = x; before = true; break; } target = x; before = false; }
+      if (target) target.classList.add(before ? 'drop-before' : 'drop-after');
+      st.target = target; st.before = before;
+    }
+  }, { passive:false });
+  const end = () => {
+    if (!st) return;
+    const s2 = st, id = s2.row.dataset.item;
+    if (s2.mode) { suppressClick = true; setTimeout(() => suppressClick = false, 350); }
+    if (s2.mode === 'swipe' && Math.abs(s2.dx || 0) > 90) {
+      reset();
+      if (s2.dx > 0) toggleItem(id); else deleteItem(id);
+      return;
+    }
+    if (s2.mode === 'drag' && s2.target) {
+      const ids = [...box.querySelectorAll('.irow[draggable=true]')].map(x => x.dataset.item).filter(x => x !== id);
+      const at = ids.indexOf(s2.target.dataset.item) + (s2.before ? 0 : 1);
+      const prev = db.items[ids[at - 1]], next = db.items[ids[at]], it = db.items[id];
+      reset();
+      it.order = prev && next ? (ord(prev) + ord(next)) / 2 : prev ? ord(prev) + 1000 : next ? ord(next) - 1000 : now();
+      it.updatedAt = now(); commit(); return;
+    }
+    reset();
+  };
+  box.addEventListener('touchend', end); box.addEventListener('touchcancel', end);
+})();
 
 /* ---------- bara „Adaugă o sarcină” (PC) ---------- */
 let ab = { due:'', rep:false };
@@ -1279,6 +1575,9 @@ function refreshDetail() {
       ${L.km ? `<label class="frow"><span class="fl">Kilometraj</span><input id="dKm" inputmode="numeric" placeholder="0 km" value="${i.km ?? ''}"></label>` : ''}
     </div>`}
     <div class="fgroup"><label class="frow input"><textarea id="dNote" placeholder="Adaugă o notă">${esc(i.note)}</textarea></label></div>
+    <div class="fh">Poze</div>
+    <div class="fgroup"><div class="photos" id="dPhotos">${(i.photos || []).map(p => `<div class="ph ${p.up || !cfg.token ? '' : 'up'}" data-ph="${p.id}" title="${p.up || !cfg.token ? '' : 'Se urcă…'}"></div>`).join('')}
+      <label class="add" title="Adaugă poză">${ic('ui-camera', 24, 2)}<input type="file" accept="image/*" multiple hidden id="dPhotoIn"></label></div></div>
     <div class="fgroup"><label class="frow"><span class="fl">Listă</span><select id="dList">${opts}</select></label></div>`;
   $('#dFoot') && ($('#dFoot').innerHTML = `<span>Creat ${new Date(i.createdAt).toLocaleDateString('ro-RO', { day:'numeric', month:'long', year:'numeric' })}</span>
     <button id="dDel" title="Șterge">${ic('ui-trash', 19, 2)}</button>`);
@@ -1293,6 +1592,12 @@ function refreshDetail() {
   if (q('#dAmt')) q('#dAmt').oninput = e => { i.amount = parseNum(e.target.value); touchItem(i); };
   if (q('#dKm')) q('#dKm').oninput = e => { i.km = parseNum(e.target.value); touchItem(i); };
   q('#dNote').oninput = e => { i.note = e.target.value; touchItem(i); };
+  q('#dPhotoIn').onchange = e => { const f = [...e.target.files]; e.target.value = ''; if (f.length) addPhotos(i, f); };
+  body.querySelectorAll('[data-ph]').forEach(async el => {
+    const p = i.photos.find(x => x.id === el.dataset.ph);
+    el.onclick = () => viewPhoto(i, p.id);
+    const src = await photoSrc(p).catch(() => ''); if (src) el.style.backgroundImage = `url("${src}")`;
+  });
   q('#dList').onchange = e => { i.listId = e.target.value; touchItem(i); refreshDetail(); };
   /* pași */
   const st = q('#dStep');
@@ -1345,12 +1650,15 @@ function editList(id, newKind) {
         ${isNew ? '' : `<label class="frow"><span class="fl">Tip listă</span><select id="lKind">${Object.entries(KINDS).map(([k, t]) => `<option value="${k}" ${k === kind ? 'selected' : ''}>${t.name}</option>`).join('')}</select></label>`}
         <label class="frow"><span class="fl">Sume<small>Total rămas și plătit</small></span><input type="checkbox" class="sw" id="lMoney" ${L.money ? 'checked' : ''}></label>
         <label class="frow"><span class="fl">Kilometraj<small>Pentru revizii și întreținere auto</small></span><input type="checkbox" class="sw" id="lKm" ${L.km ? 'checked' : ''}></label>
+        <label class="frow" id="lRevRow1"><span class="fl">Revizie la fiecare<small>Pentru calculul următoarei revizii</small></span><input id="lRevKm" inputmode="numeric" value="${(L.revKm ?? 15000).toLocaleString('ro-RO')}" style="max-width:110px"></label>
+        <label class="frow" id="lRevRow2"><span class="fl">sau la fiecare (luni)</span><input id="lRevMonths" inputmode="numeric" value="${L.revMonths ?? 12}" style="max-width:80px"></label>
       </div>
       ${isNew ? '' : `
       <div class="fh">Acțiuni</div>
       <div class="fgroup">
         <div class="frow btnrow" id="lReset" aria-disabled="${!doneCount}">Debifează tot</div>
         <div class="frow btnrow" id="lClear" aria-disabled="${!doneCount}">Șterge elementele finalizate</div>
+        <div class="frow btnrow" id="lExport">Exportă lista în Excel</div>
       </div>
       <div class="ff">„Debifează tot” e util pentru liste refolosite, de exemplu bagajul pentru vacanță.</div>
       <div class="fgroup"><div class="frow btnrow red" id="lDel">Șterge lista</div></div>`}
@@ -1368,6 +1676,9 @@ function editList(id, newKind) {
       paint();
       s.querySelectorAll('[data-ic]').forEach(b => b.onclick = () => { icon = b.dataset.ic; paint(); });
       s.querySelectorAll('[data-col]').forEach(b => b.onclick = () => { color = b.dataset.col; paint(); });
+      const revVis = () => ['#lRevRow1', '#lRevRow2'].forEach(x => q(x).classList.toggle('hidden', !q('#lKm').checked));
+      q('#lKm').addEventListener('change', revVis); revVis();
+      if (!isNew && q('#lExport')) q('#lExport').onclick = () => exportCSV([id]);
       if (isNew) {
         q('#lBack').onclick = chooseKind;
         setTimeout(() => { q('#lName').focus(); q('#lName').select(); }, 80);
@@ -1385,7 +1696,8 @@ function editList(id, newKind) {
       }
       q('#ok').onclick = () => {
         const name = q('#lName').value.trim(); if (!name) return q('#lName').focus();
-        const fields = { name, kind, icon, color, money:q('#lMoney').checked, km:q('#lKm').checked, updatedAt:now() };
+        const fields = { name, kind, icon, color, money:q('#lMoney').checked, km:q('#lKm').checked, updatedAt:now(),
+                         revKm: parseNum(q('#lRevKm').value) || 15000, revMonths: parseInt(q('#lRevMonths').value) || 12 };
         if (q('#lGroup')) fields.group = q('#lGroup').value;
         if (isNew) {
           const nid = uid();
@@ -1451,6 +1763,7 @@ function openSettings() {
 
       <div class="fh">Backup</div>
       <div class="fgroup">
+        <div class="frow btnrow" id="sExcel">Exportă toate listele în Excel</div>
         <div class="frow btnrow" id="sExport">Exportă într-un fișier</div>
         <div class="frow btnrow" id="sImport">Importă dintr-un fișier</div>
       </div>
@@ -1494,6 +1807,7 @@ function openSettings() {
       };
       armed(q('#sOff'), () => { cfg = {}; store(LS_CFG, cfg); setStatus('local'); closeSheet(); });
       q('#sExport').onclick = exportData;
+      q('#sExcel').onclick = () => exportCSV(null);
       q('#sImport').onclick = () => $('#importFile').click();
     });
 }
@@ -1586,6 +1900,7 @@ async function sync() {
       if (await ghPut(db, r.sha)) break;
     }
     cfg.lastSync = now(); store(LS_CFG, cfg); setStatus('ok');
+    uploadPending();
   } catch (e) {
     setStatus(navigator.onLine === false ? 'offline' : 'error', e.message);
   } finally {
@@ -1633,7 +1948,13 @@ $('#btnSettings2').innerHTML = ic('ui-gear', 18, 1.9);
 $('#btnSettings2').onclick = openSettings;
 $('#btnAddGroup').innerHTML = ic('ui-folderplus', 18, 1.9);
 $('#btnAddGroup').onclick = () => editGroup(null);
+$('#totals').addEventListener('click', e => {
+  const a = e.target.closest('[data-act]'); if (!a) return;
+  if (a.dataset.act === 'stats') openStats(ui.current);
+  if (a.dataset.act === 'nextrev') planRevision(ui.current);
+});
 $('#items').addEventListener('click', e => {
+  if (suppressClick) { e.stopPropagation(); return; }
   const t = e.target.closest('[data-toggle]'); if (t) return toggleItem(t.dataset.toggle);
   const st = e.target.closest('[data-star]'); if (st) return toggleStar(st.dataset.star);
   const ed = e.target.closest('[data-edit]'); if (ed) return editItem(ed.dataset.edit);
@@ -1684,6 +2005,9 @@ updateBar();
 setStatus(cfg.token ? 'ok' : 'local');
 if (cfg.token) sync();
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+checkUpdate();
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkUpdate(); });
+setInterval(checkUpdate, 10 * 60 * 1000);
 </script>
 </body>
 </html>

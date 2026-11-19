@@ -21,7 +21,16 @@ Comportamentul urmează Microsoft To Do. Pe PC aspectul este cel al aplicației 
 - **Căutare** în toate listele (titlu, notă, pași), fără să conteze diacriticele
 - Scurtături: **Ctrl+N** sau **N** = element nou, **Ctrl+F** = căutare, **Esc** = închide
 
+**Pe telefon:**
+- **Glisare** pe un element: spre dreapta = bifat, spre stânga = șters (cu „Anulează”)
+- **Ținere apăsat ~0,4 s, apoi tragere** = schimbarea ordinii
+
 **Pe toate dispozitivele:**
+- **Statistici pe luni** pentru listele cu sume: grafic pe an, total, medie și plățile din fiecare lună
+- **Export în Excel** (fișier CSV): o listă sau toate listele
+- **Următoarea revizie** pentru listele cu kilometraj: se calculează din ultimul kilometraj și intervalul ales (implicit 15.000 km sau 12 luni); un clic o adaugă în Planificate
+- **Poze atașate** la elemente (bonuri, facturi): se micșorează automat și se păstrează și în `bifa-date/poze`, ca să apară pe toate dispozitivele
+- **Notificare „Versiune nouă disponibilă”** după fiecare actualizare a aplicației
 
 - **Liste inteligente**: Ziua mea (se golește în fiecare noapte), Important (elementele cu steluță), Planificate, Toate
 - **Tipuri de liste** la creare: Sarcini, Datorii și plăți, Cumpărături, Bagaj / checklist, Auto și întreținere, Listă simplă (fără bifă)
@@ -117,5 +126,6 @@ Se urcă noul `index.html` în repository-ul `bifa`, peste cel vechi. Dispozitiv
 | `index.html` | Aplicația propriu-zisă |
 | `manifest.webmanifest` | Nume și iconiță pentru instalare |
 | `sw.js` | Funcționarea fără internet |
+| `version.json` | Versiunea publicată (pentru notificarea de actualizare) |
 | `fonts/` | Fontul Inter (pe Windows și Android) |
 | `icon-192.png`, `icon-512.png`, `apple-touch-icon.png`, `favicon.png` | Iconițe |
