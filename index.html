@@ -433,6 +433,16 @@ svg{display:block;flex:none}
   /* ferestrele (setări, opțiuni listă) */
   .sheet{border-radius:10px}
 }
+/* ===== ecrane tactile: fără efecte de mouse rămase după atingere ===== */
+@media (hover:none){
+  .irow:hover,.lrow:hover,.kind:hover{background:var(--cell)}
+  .tile:hover{background:var(--cell)}
+  .circ:hover{background:var(--fill)}
+  .irow:not(.done) .chk:hover{border-color:var(--label3);background:none}
+  .star:hover{color:var(--label3)} .star.on:hover{color:var(--list)}
+  .irow:active,.lrow:active{background:var(--cell-h)}
+}
+
 /* ===== telefon ===== */
 @media (max-width:760px){
   #app,#app.side-hidden,#app.with-detail,#app.side-hidden.with-detail{grid-template-columns:1fr}
@@ -515,6 +525,7 @@ svg{display:block;flex:none}
   <aside id="detail"></aside>
 </div>
 <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+<input id="kbdProxy" aria-hidden="true" tabindex="-1" autocomplete="off" style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:17px;border:0;padding:0;pointer-events:none">
 
 <script>
 "use strict";
@@ -1126,6 +1137,7 @@ function openSheet(html, onReady, cls = '') {
 function resetScroll() { if (window.scrollX || window.scrollY) window.scrollTo(0, 0); }
 function closeSheet(instant) {
   const s = sheetEl; if (!s) return; sheetEl = null;
+  if (detailId && !wide()) { detailId = null; setTimeout(render, 0); }
   document.activeElement?.blur?.(); setTimeout(resetScroll, 50); setTimeout(resetScroll, 400);
   if (instant) return s.remove();
   s.classList.add('closing'); setTimeout(() => s.remove(), 200);
@@ -1203,7 +1215,8 @@ function openComposer() {
       send.onclick = add;
       t.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
       [amt, km].forEach(x => x.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); add(); } }));
-      setTimeout(() => t.focus(), 80);
+      t.focus({ preventScroll:true });              // direct, în aceeași atingere: altfel iPhone nu deschide tastatura
+      setTimeout(() => { if (document.activeElement !== t) t.focus({ preventScroll:true }); }, 60);
     }, 'composer');
 }
 
@@ -1635,7 +1648,10 @@ $('#btnListMenu').innerHTML = ic('ui-more', 20, 2.4);
 $('#btnBack').innerHTML = ic('ui-back', 26, 2.4) + `<span>${APP}</span>`;
 $('#btnAddList').innerHTML = ic('ui-plus', 20, 2.4) + 'Listă nouă';
 $('#fab').innerHTML = ic('ui-plus', 28, 2.6);
-$('#fab').onclick = openComposer;
+$('#fab').onclick = () => {
+  $('#kbdProxy').focus({ preventScroll:true });   // pe iPhone, tastatura se deschide în momentul atingerii, apoi trece în câmpul real
+  openComposer();
+};
 $('#btnAddList').onclick = chooseKind;
 $('#btnListMenu').onclick = () => curList() && editList(ui.current);
 $('#btnSettings').onclick = openSettings;
