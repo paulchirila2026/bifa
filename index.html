@@ -1401,6 +1401,16 @@ function openSettings() {
       <div class="fgroup"><div class="swatches" id="sTheme">${swatches(ui.theme, false)}</div></div>
       <div class="ff">Listele fără culoare proprie folosesc această culoare.</div>
 
+      <div class="fh">La pornire</div>
+      <div class="fgroup">
+        <label class="frow"><span class="fl">Se deschide cu</span><select id="sStart">
+          <option value="">Ultima listă deschisă</option>
+          ${Object.entries(SMART).map(([id, S]) => `<option value="${id}" ${ui.startList === id ? 'selected' : ''}>${S.name}</option>`).join('')}
+          ${liveLists().map(l => `<option value="${esc(l.id)}" ${ui.startList === l.id ? 'selected' : ''}>${esc(l.name)}</option>`).join('')}
+        </select></label>
+      </div>
+      <div class="ff">Lista care apare când deschizi aplicația, pe telefon și pe PC.</div>
+
       <div class="fh">Afișare</div>
       <div class="fgroup">
         ${sw('smart', 'Liste inteligente', 'Ziua mea, Important, Planificate, Toate')}
@@ -1442,6 +1452,7 @@ function openSettings() {
         b.onclick = () => { ui[key] = b.dataset[attr]; saveUI(); applyLook(); after && after(); s.querySelectorAll(sel + ' button').forEach(x => x.classList.toggle('on', x === b)); };
       });
       seg('#sMode', 'mode', 'm'); seg('#sBg', 'bg', 'b');
+      q('#sStart').onchange = e => { ui.startList = e.target.value; saveUI(); };
       s.querySelectorAll('#sTheme [data-col]').forEach(b => b.onclick = () => {
         ui.theme = b.dataset.col; saveUI(); applyLook(); render();
         s.querySelectorAll('#sTheme [data-col]').forEach(x => x.classList.toggle('on', x === b));
@@ -1645,6 +1656,7 @@ let wasDesk = isDesk();
 addEventListener('resize', () => { updateBar(); if (isDesk() !== wasDesk) { wasDesk = isDesk(); render(); } });
 
 /* ---------- pornire ---------- */
+if (ui.startList && (isSmart(ui.startList) || (db.lists[ui.startList] && !db.lists[ui.startList].deleted))) ui.current = ui.startList;
 applyLook();
 render();
 if (ui.current) document.body.classList.add('in-list');      // pe telefon se deschide direct ultima listă
