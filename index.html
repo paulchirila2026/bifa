@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f2f2f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -38,6 +38,10 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
+/* pagina nu se poate deplasa lateral (pe iPhone, tastatura o muta altfel și nu o mai aduce înapoi) */
+html,body{position:fixed;inset:0;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:manipulation}
+#app{width:100%;overflow:hidden}
+.scroll,.sheet,#detail .sh-body{overflow-x:hidden;touch-action:pan-y}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter Variable","Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;font-feature-settings:"cv11","ss01";
   background:var(--bg);color:var(--label);font-size:16px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;overflow:hidden}
 button,input,textarea,select{font:inherit;color:inherit;letter-spacing:inherit}
@@ -1120,8 +1124,10 @@ function openSheet(html, onReady, cls = '') {
   sh.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeSheet());
   onReady && onReady(sh);
 }
+function resetScroll() { if (window.scrollX || window.scrollY) window.scrollTo(0, 0); }
 function closeSheet(instant) {
   const s = sheetEl; if (!s) return; sheetEl = null;
+  document.activeElement?.blur?.(); setTimeout(resetScroll, 50); setTimeout(resetScroll, 400);
   if (instant) return s.remove();
   s.classList.add('closing'); setTimeout(() => s.remove(), 200);
 }
@@ -1634,6 +1640,8 @@ document.addEventListener('keydown', e => {                 // scurtături: N / 
   }
   if (k === 'f' && (e.ctrlKey || e.metaKey) && isDesk()) { e.preventDefault(); $('#dSearch').focus(); $('#dSearch').select(); }
 });
+window.visualViewport?.addEventListener('resize', () => { if (!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) resetScroll(); });
+document.addEventListener('focusout', () => setTimeout(() => { if (!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) resetScroll(); }, 100));
 let wasDesk = isDesk();
 addEventListener('resize', () => { updateBar(); if (isDesk() !== wasDesk) { wasDesk = isDesk(); render(); } });
 
