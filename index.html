@@ -548,7 +548,7 @@ svg{display:block;flex:none}
     <div class="nav">
       <div class="l" style="display:flex;align-items:center;gap:6px"><button class="back" id="btnBack"></button><button class="circ side-btn" id="btnSide" title="Ascunde / arată bara laterală" aria-label="Bara laterală"></button></div>
       <div class="nav-title" id="navTitle"></div>
-      <div class="r"><button class="circ" id="btnListMenu" title="Opțiuni listă" aria-label="Opțiuni listă"></button></div>
+      <div class="r"><button class="circ hidden" id="btnStats" title="Statistici" aria-label="Statistici"></button><button class="circ" id="btnListMenu" title="Opțiuni listă" aria-label="Opțiuni listă"></button></div>
     </div>
     <div class="scroll" id="scroller">
       <div class="big-title"><h1 id="title"></h1><div class="sub" id="subtitle"></div></div>
@@ -575,7 +575,7 @@ svg{display:block;flex:none}
 
 const ICONS = {"wallet":"<path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/> <path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/>","receipt":"<path d=\"M12 17V7\"/> <path d=\"M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8\"/> <path d=\"M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z\"/>","card":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"5\" rx=\"2\"/> <line x1=\"2\" x2=\"22\" y1=\"10\" y2=\"10\"/> <path d=\"M6 14h2\"/>","bank":"<path d=\"M10 18v-7\"/> <path d=\"M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z\"/> <path d=\"M14 18v-7\"/> <path d=\"M18 18v-7\"/> <path d=\"M3 22h18\"/> <path d=\"M6 18v-7\"/>","car":"<path d=\"M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2\"/> <circle cx=\"7\" cy=\"17\" r=\"2\"/> <path d=\"M9 17h6\"/> <circle cx=\"17\" cy=\"17\" r=\"2\"/>","wrench":"<path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z\"/>","fuel":"<path d=\"M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5\"/> <path d=\"M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16\"/> <path d=\"M2 21h13\"/> <path d=\"M3 9h11\"/>","palm":"<path d=\"M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4\"/> <path d=\"M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3\"/> <path d=\"M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35\"/> <path d=\"M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14\"/>","plane":"<path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\"/>","backpack":"<path d=\"M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z\"/> <path d=\"M8 10h8\"/> <path d=\"M8 18h8\"/> <path d=\"M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6\"/> <path d=\"M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2\"/>","luggage":"<path d=\"M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2\"/> <path d=\"M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14\"/> <path d=\"M10 20h4\"/> <circle cx=\"16\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","cart":"<path d=\"m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18\"/> <path d=\"M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25\"/> <circle cx=\"18\" cy=\"20\" r=\"2\"/> <circle cx=\"8\" cy=\"20\" r=\"2\"/>","house":"<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/> <path d=\"M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/>","gift":"<path d=\"M12 7v14\"/> <path d=\"M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8\"/> <path d=\"M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5\"/> <rect x=\"3\" y=\"7\" width=\"18\" height=\"4\" rx=\"1\"/>","book":"<path d=\"M12 5v16\"/> <path d=\"M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z\"/>","laptop":"<path d=\"M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z\"/> <path d=\"M20.054 15.987H3.946\"/>","note":"<path d=\"M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4\"/> <path d=\"M2 6h4\"/> <path d=\"M2 10h4\"/> <path d=\"M2 14h4\"/> <path d=\"M2 18h4\"/> <path d=\"M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z\"/>","pin":"<path d=\"M12 17v5\"/> <path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","heart":"<path d=\"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5\"/>","paw":"<circle cx=\"11\" cy=\"4\" r=\"2\"/> <circle cx=\"18\" cy=\"8\" r=\"2\"/> <circle cx=\"20\" cy=\"16\" r=\"2\"/> <path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\"/>","leaf":"<path d=\"M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20\"/> <path d=\"M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13\"/>","food":"<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\"/> <path d=\"M7 2v20\"/> <path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\"/>","gym":"<path d=\"M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z\"/> <path d=\"m2.5 21.5 1.4-1.4\"/> <path d=\"m20.1 3.9 1.4-1.4\"/> <path d=\"M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z\"/> <path d=\"m9.6 14.4 4.8-4.8\"/>","game":"<line x1=\"6\" x2=\"10\" y1=\"11\" y2=\"11\"/> <line x1=\"8\" x2=\"8\" y1=\"9\" y2=\"13\"/> <line x1=\"15\" x2=\"15.01\" y1=\"12\" y2=\"12\"/> <line x1=\"18\" x2=\"18.01\" y1=\"10\" y2=\"10\"/> <path d=\"M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z\"/>","music":"<path d=\"M21 16V3a1 1 0 0 0-1.28-.96l-10 2.917a1 1 0 0 0-.72.96V19\"/> <circle cx=\"18\" cy=\"16\" r=\"3\"/> <circle cx=\"6\" cy=\"19\" r=\"3\"/>","shirt":"<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\"/>","bulb":"<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\"/> <path d=\"M9 18h6\"/> <path d=\"M10 22h4\"/>","box":"<path d=\"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z\"/> <path d=\"M12 22V12\"/> <polyline points=\"3.29 7 12 12 20.71 7\"/> <path d=\"m7.5 4.27 9 5.15\"/>","school":"<path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"/> <path d=\"M22 10v6\"/> <path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"/>","baby":"<path d=\"M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5\"/> <path d=\"M15 12h.01\"/> <path d=\"M19.38 6.813A9 9 0 0 1 20.8 10.2a2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1\"/> <path d=\"M9 12h.01\"/>","work":"<path d=\"M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\"/> <rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"/>","tools":"<path d=\"m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9\"/> <path d=\"m18 15 4-4\"/> <path d=\"m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5\"/>","list":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <path d=\"m3 7 2 2 4-4\"/>","ui-back":"<path d=\"m15 18-6-6 6-6\"/>","ui-chev":"<path d=\"m9 18 6-6-6-6\"/>","ui-down":"<path d=\"m6 9 6 6 6-6\"/>","ui-plus":"<path d=\"M5 12h14\"/> <path d=\"M12 5v14\"/>","ui-more":"<circle cx=\"12\" cy=\"12\" r=\"1\"/> <circle cx=\"19\" cy=\"12\" r=\"1\"/> <circle cx=\"5\" cy=\"12\" r=\"1\"/>","ui-settings":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>","ui-cal":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/>","ui-repeat":"<path d=\"m17 2 4 4-4 4\"/> <path d=\"M3 11v-1a4 4 0 0 1 4-4h14\"/> <path d=\"m7 22-4-4 4-4\"/> <path d=\"M21 13v1a4 4 0 0 1-4 4H3\"/>","ui-noteline":"<path d=\"M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z\"/> <path d=\"M15 3v5a1 1 0 0 0 1 1h5\"/>","ui-km":"<path d=\"m12 14 4-4\"/> <path d=\"M3.34 19a10 10 0 1 1 17.32 0\"/>","ui-money":"<rect width=\"20\" height=\"12\" x=\"2\" y=\"6\" rx=\"2\"/> <circle cx=\"12\" cy=\"12\" r=\"2\"/> <path d=\"M6 12h.01M18 12h.01\"/>","ui-x":"<path d=\"M18 6 6 18\"/> <path d=\"m6 6 12 12\"/>","ui-check":"<path d=\"M20 6 9 17l-5-5\"/>","ui-sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-moon":"<path d=\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"/>","ui-monitor":"<rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\"/> <line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\"/> <line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\"/>","ui-inbox":"<polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/> <path d=\"M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/>","ui-done":"<path d=\"M21.801 10A10 10 0 1 1 17 3.335\"/> <path d=\"m9 11 3 3L22 4\"/>","ui-up":"<path d=\"m5 12 7-7 7 7\"/> <path d=\"M12 19V5\"/>","ui-trash":"<path d=\"M10 11v6\"/> <path d=\"M14 11v6\"/> <path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6\"/> <path d=\"M3 6h18\"/> <path d=\"M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2\"/>","ui-today":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m9 15 2 2 4-4\"/>","ui-cloud":"<path d=\"M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z\"/>","ui-download":"<path d=\"M12 15V3\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/> <path d=\"m7 10 5 5 5-5\"/>","ui-upload":"<path d=\"M12 3v12\"/> <path d=\"m17 8-5-5-5 5\"/> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/>","camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","phone":"<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\" ry=\"2\"/> <path d=\"M12 18h.01\"/>","ui-panel":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M9 3v18\"/>","ui-star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","ui-myday":"<circle cx=\"12\" cy=\"12\" r=\"4\"/> <path d=\"M12 2v2\"/> <path d=\"M12 20v2\"/> <path d=\"m4.93 4.93 1.41 1.41\"/> <path d=\"m17.66 17.66 1.41 1.41\"/> <path d=\"M2 12h2\"/> <path d=\"M20 12h2\"/> <path d=\"m6.34 17.66-1.41 1.41\"/> <path d=\"m19.07 4.93-1.41 1.41\"/>","ui-flag":"<path d=\"M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528\"/>","ui-steps":"<path d=\"M13 5h8\"/> <path d=\"M13 12h8\"/> <path d=\"M13 19h8\"/> <path d=\"m3 17 2 2 4-4\"/> <rect x=\"3\" y=\"4\" width=\"6\" height=\"6\" rx=\"1\"/>","ui-plusc":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"M8 12h8\"/> <path d=\"M12 8v8\"/>","ui-close":"<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/> <path d=\"M15 3v18\"/> <path d=\"m8 9 3 3-3 3\"/>","ui-folder":"<path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderplus":"<path d=\"M12 10v6\"/> <path d=\"M9 13h6\"/> <path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/>","ui-folderopen":"<path d=\"m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2\"/>","ui-search":"<path d=\"m21 21-4.34-4.34\"/> <circle cx=\"11\" cy=\"11\" r=\"8\"/>","ui-calx":"<path d=\"M8 2v3\"/> <path d=\"M16 2v3\"/> <rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/> <path d=\"M3 9h18\"/> <path d=\"m14 13-4 4\"/> <path d=\"m10 13 4 4\"/>","ui-calclock":"<path d=\"M16 14v2.2l1.6 1\"/> <path d=\"M16 2v3\"/> <path d=\"M21 7.338V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2.338\"/> <path d=\"M3 9h5.859\"/> <path d=\"M8 2v3\"/> <circle cx=\"16\" cy=\"16\" r=\"6\"/>","ui-pencil":"<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\"/> <path d=\"m15 5 4 4\"/>","ui-undo":"<path d=\"M9 14 4 9l5-5\"/> <path d=\"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11\"/>","ui-move":"<path d=\"m16 3 4 4-4 4\"/> <path d=\"M20 7H4\"/> <path d=\"m8 21-4-4 4-4\"/> <path d=\"M4 17h16\"/>","ui-circlecheck":"<circle cx=\"12\" cy=\"12\" r=\"10\"/> <path d=\"m16 9-5.5 5.5L8 12\"/>","ui-gear":"<path d=\"M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915\"/> <circle cx=\"12\" cy=\"12\" r=\"3\"/>","ui-chart":"<path d=\"M3 3v16a2 2 0 0 0 2 2h16\"/> <path d=\"M18 17V9\"/> <path d=\"M13 17V5\"/> <path d=\"M8 17v-3\"/>","ui-excel":"<path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\"/> <path d=\"M14 2v5a1 1 0 0 0 1 1h5\"/> <path d=\"M8 13h2\"/> <path d=\"M14 13h2\"/> <path d=\"M8 17h2\"/> <path d=\"M14 17h2\"/>","ui-camera":"<path d=\"M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z\"/> <circle cx=\"12\" cy=\"13\" r=\"3\"/>","ui-imgplus":"<path d=\"M16 5h6\"/> <path d=\"M19 2v6\"/> <path d=\"M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5\"/> <path d=\"m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21\"/> <circle cx=\"9\" cy=\"9\" r=\"2\"/>","ui-wrench":"<path d=\"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z\"/>"};
 const APP = 'Bifa';
-const VERSION = '20261119223733';
+const VERSION = '20261119224227';
 const $ = s => document.querySelector(s);
 const LS_DATA = 'liste.data.v1', LS_CFG = 'liste.cfg.v1', LS_UI = 'liste.ui.v3';
 const FILE = 'liste.json';
@@ -605,7 +605,9 @@ const SMART = {
   '@all':      { name:'Toate',       icon:'ui-inbox', color:'#5b5b60' }
 };
 const REPEATS = { '':'Niciodată', daily:'Zilnic', weekly:'Săptămânal', monthly:'Lunar', yearly:'Anual' };
-const MONTHS = ['ianuarie','februarie','martie','aprilie','mai','iunie','iulie','august','septembrie','octombrie','noiembrie','decembrie'];
+const LOC = () => ui.lang === 'en' ? 'en-GB' : 'ro-RO';
+const MONTHS = new Proxy([], { get:(t, k) => k === 'map' ? (f => Array.from({ length:12 }, (_, i) => f(MONTHS[i], i))) : k === 'length' ? 12
+  : new Date(2026, +k, 1).toLocaleDateString(LOC(), { month:'long' }) });
 const now = () => Date.now();
 const uid = () => now().toString(36) + Math.random().toString(36).slice(2, 8);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -627,7 +629,7 @@ for (const id in SEED) {
   else if (!db.lists[id].updatedAt) Object.assign(db.lists[id], { icon:SEED[id].icon, color:SEED[id].color, kind:SEED[id].kind });
 }
 let cfg = load(LS_CFG) || {};
-let ui  = Object.assign({ current:null, mode:'system', theme:'orange', bg:'soft', doneOpen:{}, groupOpen:{} }, load(LS_UI) || {});
+let ui  = Object.assign({ current:null, mode:'system', theme:'orange', bg:'soft', lang:'en', doneOpen:{}, groupOpen:{} }, load(LS_UI) || {});
 ui.show = Object.assign({ totals:true, counts:true, meta:true, done:true, smart:true, sync:true, compact:false, sound:true }, ui.show || {});
 if (!THEMES[ui.theme]) ui.theme = 'orange';
 if (!ui.brand2) { ui.theme = 'orange'; ui.brand2 = 1; store(LS_UI, ui); }   // culoarea mărcii Bifa: portocaliu
@@ -639,6 +641,19 @@ const liveItems = () => Object.values(db.items).filter(i => !i.deleted && db.lis
 const liveGroups = () => Object.values(db.groups || {}).filter(g => !g.deleted).sort((a, b) => (a.order - b.order) || a.name.localeCompare(b.name, 'ro'));
 const isDesk = () => matchMedia('(min-width:761px)').matches;
 const ord = i => i.order ?? i.createdAt;
+const SORTS = { manual:'Manual (prin tragere)', newest:'Cele mai noi primele', oldest:'Cele mai vechi primele', alpha:'Alfabetic',
+                due:'După dată limită', amount:'După sumă (mare → mică)', km:'După kilometraj (mare → mic)' };
+const isManual = L => !L || !L.sort || L.sort === 'manual';
+function sorter(L) {
+  const by = {
+    newest:(a, b) => b.createdAt - a.createdAt, oldest:(a, b) => a.createdAt - b.createdAt,
+    alpha:(a, b) => a.title.localeCompare(b.title, 'ro', { sensitivity:'base', numeric:true }),
+    due:(a, b) => (a.due || '9999').localeCompare(b.due || '9999') || ord(a) - ord(b),
+    amount:(a, b) => (b.amount ?? -1) - (a.amount ?? -1) || ord(a) - ord(b),
+    km:(a, b) => (b.km ?? -1) - (a.km ?? -1) || b.createdAt - a.createdAt
+  }[L && L.sort];
+  return by || ((a, b) => ord(a) - ord(b));
+}
 const itemsOf = id => liveItems().filter(i => i.listId === id);
 const curList = () => { const l = db.lists[ui.current]; return l && !l.deleted ? l : null; };
 const isSmart = id => id in SMART;
@@ -680,7 +695,7 @@ function dueInfo(s, done) {
   const t = todayStr(), tm = ymd(new Date(now() + 864e5));
   const [y, m, d] = s.split('-').map(Number);
   const label = s === t ? 'Azi' : s === tm ? 'Mâine'
-    : new Date(y, m - 1, d).toLocaleDateString('ro-RO', { day:'numeric', month:'short', year: y === new Date().getFullYear() ? undefined : 'numeric' });
+    : new Date(y, m - 1, d).toLocaleDateString(LOC(), { day:'numeric', month:'short', year: y === new Date().getFullYear() ? undefined : 'numeric' });
   return { label, cls: done ? '' : s < t ? 'late' : s === t ? 'today' : '' };
 }
 /* Data se alege doar ca zi + lună; anul e cel curent, iar o dată rămasă cu peste o lună în urmă trece în anul următor */
@@ -728,7 +743,7 @@ function wireDate(root, onChange) {
   day.onchange = mon.onchange = () => set(dateFrom(+day.value, +mon.value));
 }
 
-const longDate = () => { const s = new Date().toLocaleDateString('ro-RO', { weekday:'long', day:'numeric', month:'long' }); return s[0].toUpperCase() + s.slice(1); };
+const longDate = () => { const s = new Date().toLocaleDateString(LOC(), { weekday:'long', day:'numeric', month:'long' }); return s[0].toUpperCase() + s.slice(1); };
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 /* ---------- aspect ---------- */
@@ -777,6 +792,7 @@ function render() {
   const L = curList();
   $('#main').style.setProperty('--list', listColor(L));
   $('#btnListMenu').classList.toggle('hidden', !L);
+  $('#btnStats').classList.toggle('hidden', !(L && L.money));
   $('#fab').classList.toggle('hidden', !L);
   $('#addBar').classList.toggle('hidden-bar', !L);
   updateBar();
@@ -787,18 +803,18 @@ function render() {
   }
   const items = all.filter(i => i.listId === L.id);
   if (isPlain(L)) {                                     // listă simplă, fără bifă
-    $('#title').innerHTML = `<span class="t-badge">${badge(L, 'lg', 20)}</span><span>${esc(L.name)}</span>`; $('#navTitle').textContent = L.name;
+    $('#title').innerHTML = `<span class="t-badge">${badge(L, 'lg', 20)}</span><span data-u>${esc(L.name)}</span>`; $('#navTitle').textContent = L.name; $('#navTitle').dataset.u = '';
     $('#subtitle').textContent = items.length ? plural(items.length, 'element', 'elemente') : longDate();
     $('#totals').innerHTML = '';
-    const sorted = items.sort((a, b) => ord(a) - ord(b));
+    const sorted = items.sort(sorter(L));
     $('#items').innerHTML = sorted.length ? `<div class="group">${sorted.map(i => row(i, L)).join('')}</div>`
       : `<div class="empty">${badge(L, '', 30)}<b>Lista e goală</b>Apasă pe + pentru primul element.</div>`;
     return;
   }
-  const open = items.filter(i => !i.done).sort((a, b) => ord(a) - ord(b));
+  const open = items.filter(i => !i.done).sort(sorter(L));
   const done = items.filter(i => i.done).sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0));
 
-  $('#title').innerHTML = `<span class="t-badge">${badge(L, 'lg', 20)}</span><span>${esc(L.name)}</span>`; $('#navTitle').textContent = L.name;
+  $('#title').innerHTML = `<span class="t-badge">${badge(L, 'lg', 20)}</span><span data-u>${esc(L.name)}</span>`; $('#navTitle').textContent = L.name; $('#navTitle').dataset.u = '';
   $('#subtitle').textContent = open.length ? plural(open.length, 'element rămas', 'elemente rămase') : (done.length ? 'Totul e bifat' : longDate());
 
   const stats = [];
@@ -820,7 +836,7 @@ function render() {
     }
   }
   const statsHtml = stats.map(([l, v, icn, sub, act]) => `<div class="stat ${act ? 'click' : ''}" ${act ? `data-act="${act}"` : ''}><span class="si">${ic(icn, 17, 2.2)}</span><div><div class="l">${l}</div><b>${v}</b>${sub ? `<div class="sub">${sub}</div>` : ''}</div></div>`).join('')
-    + (L.money && ui.show.totals ? `<button class="stat click more" data-act="stats">${ic('ui-chart', 18, 2.2)}Statistici</button>` : '');
+    ;
   $('#totals').innerHTML = statsHtml ? `<div class="stats">${statsHtml}</div>` : '';
 
   let html = open.length ? `<div class="group">${open.map(i => row(i, L)).join('')}</div>`
@@ -842,7 +858,7 @@ function renderDesktopNav(all, lists) {
   const lrow = (l, cls) => nrow(l.id, l.name, l.icon && ICONS[l.icon] ? ic(l.icon, 18, 1.8) : esc(l.emoji || '•'), listColor(l),
     all.filter(i => i.listId === l.id && (isPlain(l) || !i.done)).length, cls);
   let h = '';
-  if (ui.show.smart) h += Object.entries(SMART).map(([id, S]) => nrow(id, S.name, ic(S.icon, 18, 1.8), S.color, all.filter(smartFilter[id]).length)).join('') + '<div class="nsep"></div>';
+  if (ui.show.smart) h += Object.entries(SMART).map(([id, S]) => nrow(id, ui.lang === 'en' ? tr(S.name) : S.name, ic(S.icon, 18, 1.8), S.color, all.filter(smartFilter[id]).length)).join('') + '<div class="nsep"></div>';
   const groups = liveGroups(), gids = new Set(groups.map(g => g.id));
   h += lists.filter(l => !gids.has(l.group)).map(l => lrow(l, '')).join('');
   h += groups.map(g => {
@@ -860,6 +876,7 @@ let query = '';
 function renderSearch(all) {
   $('#main').style.setProperty('--list', accent());
   $('#btnListMenu').classList.add('hidden'); $('#fab').classList.add('hidden');
+  $('#btnStats').classList.add('hidden');
   $('#title').innerHTML = `<span class="t-badge"><span class="badge lg" style="--c:${accent()}">${ic('ui-search', 18, 2.3)}</span></span><span>Căutare</span>`;
   $('#navTitle').textContent = 'Căutare'; $('#subtitle').textContent = `„${query}”`; $('#totals').innerHTML = '';
   const qn = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -883,9 +900,10 @@ function renderSmart(all) {
   $('#main').style.setProperty('--list', S.color);
   $('#btnListMenu').classList.add('hidden');
   $('#fab').classList.toggle('hidden', !defaultList());
+  $('#btnStats').classList.add('hidden');
   $('#addBar').classList.remove('hidden-bar');
   updateBar();
-  $('#title').innerHTML = `<span class="t-badge"><span class="badge lg" style="--c:${S.color}">${ic(S.icon, 20, 2.3)}</span></span><span>${S.name}</span>`; $('#navTitle').textContent = S.name;
+  $('#title').innerHTML = `<span class="t-badge"><span class="badge lg" style="--c:${S.color}">${ic(S.icon, 20, 2.3)}</span></span><span>${S.name}</span>`; $('#navTitle').textContent = S.name; delete $('#navTitle').dataset.u;
   $('#subtitle').textContent = longDate();
   $('#totals').innerHTML = '';
   const items = all.filter(smartFilter[ui.current]);
@@ -905,7 +923,7 @@ function renderSmart(all) {
   else if (ui.current === '@all') {
     $('#items').innerHTML = liveLists().map(l => {
       const g = items.filter(i => i.listId === l.id).sort(byDue); if (!g.length) return '';
-      return `<div class="group-h" style="--c:${listColor(l)}">${esc(l.name)}</div><div class="group">${g.map(i => row(i, l)).join('')}</div>`;
+      return `<div class="group-h" data-u style="--c:${listColor(l)}">${esc(l.name)}</div><div class="group">${g.map(i => row(i, l)).join('')}</div>`;
     }).join('');
     return;
   }
@@ -955,7 +973,7 @@ function row(i, L, showList) {
     (i.photos || []).length ? `<span>${ic('ui-camera', 13, 2.2)}${i.photos.length}</span>` : '',
     i.note ? `<span>${ic('ui-noteline', 13, 2.2)}${esc(i.note.split('\n')[0].slice(0, 50))}</span>` : ''
   ].filter(Boolean).join('');
-  const drag = !showList && !isSmart(ui.current) && !query && !(i.done && !plain);
+  const drag = !showList && !isSmart(ui.current) && !query && !(i.done && !plain) && isManual(L);
   return `<div class="irow ${i.done && !plain ? 'done' : ''} ${plain ? 'plain' : ''} ${detailId === i.id ? 'sel' : ''}" data-item="${esc(i.id)}" style="--list:${listColor(L)}" ${drag ? 'draggable="true"' : ''}>
     ${plain ? '<span class="bullet"></span>' : `<button class="chk" data-toggle="${esc(i.id)}" aria-label="Bifează">${ic('ui-check', 14, 3.2)}</button>`}
     <div class="body" data-edit="${esc(i.id)}"><div class="t">${esc(i.title)}</div>${meta ? `<div class="meta">${meta}</div>` : ''}</div>
@@ -983,7 +1001,7 @@ async function checkUpdate() {
 }
 
 /* ---------- statistici pe luni (liste cu sume) ---------- */
-const MON3 = ['ian','feb','mar','apr','mai','iun','iul','aug','sep','oct','noi','dec'];
+const MON3 = new Proxy([], { get:(t, k) => new Date(2026, +k, 1).toLocaleDateString(LOC(), { month:'short' }).replace('.', '') });
 function openStats(listId) {
   const L = db.lists[listId]; if (!L) return;
   let year = new Date().getFullYear(), month = new Date().getMonth();
@@ -1006,7 +1024,7 @@ function openStats(listId) {
           <div class="kpis"><div><small>Total ${year}</small><b>${money(total)}</b></div><div><small>Medie pe lună</small><b>${money(monthsWith ? Math.round(total / monthsWith) : 0)}</b></div></div>
         </div>
         <div class="fh">${MONTHS[month][0].toUpperCase() + MONTHS[month].slice(1)} ${year} · ${money(per[month])}</div>
-        <div class="fgroup">${inMonth.length ? inMonth.map(i => `<div class="frow"><span class="fl">${esc(i.title)}<small>${new Date(i.doneAt).toLocaleDateString('ro-RO', { day:'numeric', month:'long' })}</small></span><span style="font-variant-numeric:tabular-nums">${money(i.amount)}</span></div>`).join('')
+        <div class="fgroup">${inMonth.length ? inMonth.map(i => `<div class="frow"><span class="fl">${esc(i.title)}<small>${new Date(i.doneAt).toLocaleDateString(LOC(), { day:'numeric', month:'long' })}</small></span><span style="font-variant-numeric:tabular-nums">${money(i.amount)}</span></div>`).join('')
           : '<div class="frow" style="color:var(--label2)">Nicio plată bifată în luna aceasta</div>'}</div>
         <div class="ff">Se adună elementele bifate (plătite), după data la care au fost bifate.</div>
         <div class="fgroup"><div class="frow btnrow" id="stExport">${ic('ui-excel', 18, 2)}&nbsp;Exportă lista în Excel</div></div>`;
@@ -1030,7 +1048,7 @@ function exportCSV(listIds) {
     const L = db.lists[id];
     itemsOf(id).sort((a, b) => (a.done - b.done) || (ord(a) - ord(b))).forEach(i => rows.push([
       L.name, i.title, num(i.amount), num(i.km), isPlain(L) ? '' : i.done ? 'Finalizat' : 'De făcut',
-      i.doneAt ? new Date(i.doneAt).toLocaleDateString('ro-RO') : '', d(i.due), (i.note || '').replace(/\n/g, ' ')]));
+      i.doneAt ? new Date(i.doneAt).toLocaleDateString(LOC()) : '', d(i.due), (i.note || '').replace(/\n/g, ' ')]));
   }
   const csv = '\uFEFF' + rows.map(r => r.map(q).join(';')).join('\r\n');
   const name = ids.length === 1 ? db.lists[ids[0]].name : 'toate-listele';
@@ -1054,7 +1072,7 @@ function nextRevision(L) {
   const [y, m, d] = lastDate.split('-').map(Number);
   const months = L.revMonths ?? 12, kmStep = L.revKm ?? 15000;
   const dt = new Date(y, m - 1 + months, Math.min(d, 28));
-  return { km: last.km + kmStep, due: ymd(dt), label: dt.toLocaleDateString('ro-RO', { month:'long', year:'numeric' }),
+  return { km: last.km + kmStep, due: ymd(dt), label: dt.toLocaleDateString(LOC(), { month:'long', year:'numeric' }),
            pending: all.find(i => i.nextRev && !i.done) };
 }
 function planRevision(listId) {
@@ -1194,6 +1212,9 @@ function listMenu(id, x, y) {
     { icon:'ui-pencil', label:'Opțiuni listă…', run:() => editList(id) },
     ...(l.money ? [{ icon:'ui-chart', label:'Statistici', run:() => openStats(id) }] : []),
     { icon:'ui-excel', label:'Exportă în Excel', run:() => exportCSV([id]) },
+    { icon:'ui-move', label:'Ordonează…', keep:true, run:() => showMenu(x, y, [{ hd:'Ordonare' },
+      ...Object.entries(SORTS).filter(([k]) => (k !== 'amount' || l.money) && (k !== 'km' || l.km))
+        .map(([k, v]) => ({ icon: (l.sort || 'manual') === k ? 'ui-check' : 'ui-x', label:v, run:() => { l.sort = k; l.updatedAt = now(); commit(); } }))]) },
     ...(groups.length ? [{ icon:'ui-folder', label:'Mută în grup…', keep:true, run:() => showMenu(x, y, [{ hd:'Grup' },
       { icon:'ui-x', label:'Fără grup', run:() => { l.group = ''; l.updatedAt = now(); commit(); } },
       ...groups.map(g => ({ icon:'ui-folder', label:g.name, run:() => { l.group = g.id; l.updatedAt = now(); ui.groupOpen[g.id] = true; saveUI(); commit(); } }))]) }] : []),
@@ -1580,7 +1601,7 @@ function refreshDetail() {
     <div class="fgroup"><div class="photos" id="dPhotos">${(i.photos || []).map(p => `<div class="ph ${p.up || !cfg.token ? '' : 'up'}" data-ph="${p.id}" title="${p.up || !cfg.token ? '' : 'Se urcă…'}"></div>`).join('')}
       <label class="add" title="Adaugă poză">${ic('ui-camera', 24, 2)}<input type="file" accept="image/*" multiple hidden id="dPhotoIn"></label></div></div>
     <div class="fgroup"><label class="frow"><span class="fl">Listă</span><select id="dList">${opts}</select></label></div>`;
-  $('#dFoot') && ($('#dFoot').innerHTML = `<span>Creat ${new Date(i.createdAt).toLocaleDateString('ro-RO', { day:'numeric', month:'long', year:'numeric' })}</span>
+  $('#dFoot') && ($('#dFoot').innerHTML = `<span>Creat ${new Date(i.createdAt).toLocaleDateString(LOC(), { day:'numeric', month:'long', year:'numeric' })}</span>
     <button id="dDel" title="Șterge">${ic('ui-trash', 19, 2)}</button>`);
   const q = x => document.querySelector(x);
 
@@ -1647,6 +1668,7 @@ function editList(id, newKind) {
       <div class="fgroup"><div class="icons" id="lIcons">${LIST_ICONS.map(n => `<button data-ic="${n}" title="${n}">${ic(n, 20, 2.2)}</button>`).join('')}</div></div>
       <div class="fh">Câmpuri</div>
       <div class="fgroup">
+        <label class="frow"><span class="fl">Ordonare</span><select id="lSort">${Object.entries(SORTS).filter(([k]) => (k !== 'amount' || L.money) && (k !== 'km' || L.km)).map(([k, v]) => `<option value="${k}" ${(L.sort || 'manual') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
         ${liveGroups().length ? `<label class="frow"><span class="fl">Grup</span><select id="lGroup"><option value="">Fără grup</option>${liveGroups().map(g => `<option value="${esc(g.id)}" ${L.group === g.id ? 'selected' : ''}>${esc(g.name)}</option>`).join('')}</select></label>` : ''}
         ${isNew ? '' : `<label class="frow"><span class="fl">Tip listă</span><select id="lKind">${Object.entries(KINDS).map(([k, t]) => `<option value="${k}" ${k === kind ? 'selected' : ''}>${t.name}</option>`).join('')}</select></label>`}
         <label class="frow"><span class="fl">Sume<small>Total rămas și plătit</small></span><input type="checkbox" class="sw" id="lMoney" ${L.money ? 'checked' : ''}></label>
@@ -1700,6 +1722,7 @@ function editList(id, newKind) {
         const fields = { name, kind, icon, color, money:q('#lMoney').checked, km:q('#lKm').checked, updatedAt:now(),
                          revKm: parseNum(q('#lRevKm').value) || 15000, revMonths: parseInt(q('#lRevMonths').value) || 12 };
         if (q('#lGroup')) fields.group = q('#lGroup').value;
+        fields.sort = q('#lSort').value;
         if (isNew) {
           const nid = uid();
           db.lists[nid] = { id:nid, order:Math.max(0, ...liveLists().map(l => l.order || 0)) + 1, ...fields };
@@ -1714,6 +1737,8 @@ function openSettings() {
   const sw = (k, t, d) => `<label class="frow"><span class="fl">${t}${d ? `<small>${d}</small>` : ''}</span><input type="checkbox" class="sw" data-show="${k}" ${ui.show[k] ? 'checked' : ''}></label>`;
   openSheet(`${shHead('Setări', 'Gata', '')}
     <div class="sh-body">
+      <div class="fh">Limbă · Language</div>
+      <div class="fgroup"><div class="seg" id="sLang"><button data-l="en">English</button><button data-l="ro">Română</button></div></div>
       <div class="fh">Aspect</div>
       <div class="fgroup">
         <div class="seg" id="sMode"><button data-m="system">${ic('ui-monitor', 15)}Sistem</button><button data-m="light">${ic('ui-sun', 15)}Luminos</button><button data-m="dark">${ic('ui-moon', 15)}Întunecat</button></div>
@@ -1779,6 +1804,10 @@ function openSettings() {
         b.onclick = () => { ui[key] = b.dataset[attr]; saveUI(); applyLook(); after && after(); s.querySelectorAll(sel + ' button').forEach(x => x.classList.toggle('on', x === b)); };
       });
       seg('#sMode', 'mode', 'm'); seg('#sBg', 'bg', 'b');
+      s.querySelectorAll('#sLang button').forEach(b => {
+        b.classList.toggle('on', b.dataset.l === ui.lang);
+        b.onclick = () => { if (ui.lang === b.dataset.l) return; ui.lang = b.dataset.l; saveUI(); location.reload(); };
+      });
       q('#sStart').onchange = e => { ui.startList = e.target.value; saveUI(); };
       s.querySelectorAll('#sTheme [data-col]').forEach(b => b.onclick = () => {
         ui.theme = b.dataset.col; saveUI(); applyLook(); render();
@@ -1967,6 +1996,8 @@ $('#items').addEventListener('click', e => {
 });
 $('#btnSettings').innerHTML = ic('ui-more', 20, 2.4);
 $('#btnListMenu').innerHTML = ic('ui-more', 20, 2.4);
+$('#btnStats').innerHTML = ic('ui-chart', 18, 2.2);
+$('#btnStats').onclick = () => curList() && openStats(ui.current);
 $('#btnBack').innerHTML = ic('ui-back', 26, 2.4) + `<span>${APP}</span>`;
 $('#btnAddList').innerHTML = ic('ui-plus', 20, 2.4) + 'Listă nouă';
 $('#fab').innerHTML = ic('ui-plus', 28, 2.6);
@@ -2005,10 +2036,111 @@ document.addEventListener('focusout', () => setTimeout(() => { if (!/INPUT|TEXTA
 let wasDesk = isDesk();
 addEventListener('resize', () => { updateBar(); if (isDesk() !== wasDesk) { wasDesk = isDesk(); render(); } });
 
+
+/* ---------- traducere în engleză ----------
+   Interfața e scrisă în română; în engleză, textele afișate se înlocuiesc automat
+   (conținutul utilizatorului — titluri, liste, note — nu se traduce). */
+const EN = {
+ 'Listele mele':'My lists','Listă nouă':'New list','Caută':'Search','Setări':'Settings','Gata':'Done','Anulează':'Cancel','Închide':'Close',
+ 'Ziua mea':'My Day','Important':'Important','Planificate':'Planned','Toate':'All','Finalizate':'Completed','Căutare':'Search',
+ 'Adaugă o sarcină':'Add a task','Element nou':'New item','Detalii':'Details','Titlu':'Title','Adaugă un pas':'Add a step',
+ 'Adaugă la Ziua mea':'Add to My Day','Adăugat la Ziua mea':'Added to My Day','Dată limită':'Due date','Dată':'Date','Repetă':'Repeat',
+ 'Niciodată':'Never','Zilnic':'Daily','Săptămânal':'Weekly','Lunar':'Monthly','Anual':'Yearly','Sumă':'Amount','Km':'Km','Kilometraj':'Mileage',
+ 'Adaugă o notă':'Add a note','Poze':'Photos','Adaugă poză':'Add photo','Listă':'List','Azi':'Today','Mâine':'Tomorrow','Peste o săptămână':'In a week',
+ 'Depășite':'Overdue','Următoarele 7 zile':'Next 7 days','Mai târziu':'Later','Elemente':'Items','Niciun rezultat':'No results',
+ 'Rămas de plătit':'Left to pay','Plătit luna aceasta':'Paid this month','Cheltuit anul acesta':'Spent this year','Ultimul kilometraj':'Last mileage',
+ 'Următoarea revizie':'Next service','Statistici':'Statistics','Medie pe lună':'Monthly average','Exportă lista în Excel':'Export list to Excel',
+ 'Nicio plată bifată în luna aceasta':'No payments checked off this month','Se adună elementele bifate (plătite), după data la care au fost bifate.':'Checked-off (paid) items are added up by the date they were checked off.',
+ 'Lista e goală':'This list is empty','Apasă pe + pentru primul element.':'Tap + to add the first item.','Totul e bifat':'All done','Bravo!':'Well done!',
+ 'Începe din nou':'Start over','Nicio listă':'No lists','Creează una cu „Listă nouă”.':'Create one with “New list”.',
+ 'Adaugă aici ce vrei să faci azi. Lista se golește în fiecare noapte.':'Add what you want to do today. This list clears every night.',
+ 'Marchează cu steluță elementele importante.':'Star the items that matter.','Elementele cu dată apar aici, din toate listele.':'Items with a due date from all lists show up here.',
+ 'Nu ai nimic de făcut.':'Nothing to do.','Ce fel de listă?':'What kind of list?','Sarcini':'Tasks','Listă clasică, cu bifă':'Classic checklist',
+ 'Datorii și plăți':'Bills & payments','Cu sume: total rămas și plătit luna aceasta':'With amounts: total left and paid this month','Cumpărături':'Shopping',
+ 'Bifezi ce ai luat, apoi refolosești lista':'Check off what you bought, then reuse the list','Bagaj / checklist':'Packing / checklist',
+ 'Listă refolosibilă, se debifează la final':'Reusable list, unchecked when done','Auto și întreținere':'Car & maintenance',
+ 'Revizii cu kilometraj, dată și cost':'Services with mileage, date and cost','Listă simplă':'Simple list','Fără bifă: idei, filme de văzut, notițe':'No checkboxes: ideas, movies to watch, notes',
+ 'Pictograma, culoarea și câmpurile se pot schimba oricând din opțiunile listei.':'Icon, color and fields can be changed anytime in the list options.',
+ 'Tip':'Type','Creează':'Create','Opțiuni listă':'List options','Opțiuni listă…':'List options…','Numele listei':'List name','Câmpuri':'Fields',
+ 'Sume':'Amounts','Total rămas și plătit':'Total left and paid','Pentru revizii și întreținere auto':'For car services and maintenance',
+ 'Revizie la fiecare':'Service every','Pentru calculul următoarei revizii':'Used to calculate the next service','sau la fiecare (luni)':'or every (months)',
+ 'Ordonare':'Sort','Ordonează…':'Sort…','Manual (prin tragere)':'Manual (drag)','Cele mai noi primele':'Newest first','Cele mai vechi primele':'Oldest first',
+ 'Alfabetic':'Alphabetical','După dată limită':'By due date','După sumă (mare → mică)':'By amount (high → low)','După kilometraj (mare → mic)':'By mileage (high → low)',
+ 'Grup':'Group','Fără grup':'No group','Tip listă':'List type','Acțiuni':'Actions','Debifează tot':'Uncheck all','Șterge elementele finalizate':'Delete completed items',
+ 'Exportă în Excel':'Export to Excel','„Debifează tot” e util pentru liste refolosite, de exemplu bagajul pentru vacanță.':'“Uncheck all” is handy for reusable lists, like vacation packing.',
+ 'Șterge lista':'Delete list','Șterge elementul':'Delete item','Apasă din nou pentru confirmare':'Tap again to confirm','Apasă din nou pentru ștergere':'Click again to delete',
+ 'Aspect':'Appearance','Sistem':'System','Luminos':'Light','Întunecat':'Dark','Fundalul listelor':'List background','Neutru':'Neutral','Subtil':'Subtle','Colorat':'Colorful',
+ '„Subtil” nuanțează foarte puțin fundalul cu culoarea listei.':'“Subtle” tints the background very slightly with the list color.',
+ 'Culoare principală':'Accent color','Listele fără culoare proprie folosesc această culoare.':'Lists without their own color use this color.','Culoarea temei':'Theme color',
+ 'La pornire':'On startup','Se deschide cu':'Open with','Ultima listă deschisă':'Last opened list','Lista care apare când deschizi aplicația, pe telefon și pe PC.':'The list shown when you open the app, on phone and PC.',
+ 'Afișare':'Display','Liste inteligente':'Smart lists','Ziua mea, Important, Planificate, Toate':'My Day, Important, Planned, All','Totaluri':'Totals',
+ 'Sume și kilometraj, sus în listă':'Amounts and mileage, at the top of the list','Numărul de elemente':'Item counts','Detalii sub elemente':'Details under items',
+ 'Dată, notă, kilometraj':'Date, note, mileage','Secțiunea „Finalizate”':'“Completed” section','În fiecare listă, pliată implicit':'In every list, collapsed by default',
+ 'Starea sincronizării':'Sync status','Rânduri compacte':'Compact rows','Sunet la bifare':'Sound on check-off','Sincronizare GitHub':'GitHub sync','Utilizator':'Username',
+ 'Repository':'Repository','Token':'Token','Conectează':'Connect','Salvează și sincronizează':'Save and sync','Deconectează':'Disconnect',
+ 'Token-ul rămâne doar pe acest dispozitiv. Pașii pentru obținerea lui sunt în fișierul README.':'The token stays on this device only. How to get one is explained in the README.',
+ 'Backup':'Backup','Exportă toate listele în Excel':'Export all lists to Excel','Exportă într-un fișier':'Export to a file','Importă dintr-un fișier':'Import from a file',
+ 'Importul adaugă datele din fișier peste cele existente, fără să șteargă nimic.':'Import adds the file’s data to what you have, without deleting anything.',
+ 'Doar pe acest dispozitiv':'This device only','Se sincronizează…':'Syncing…','Offline · se sincronizează la reconectare':'Offline · will sync when back online','Eroare sincronizare':'Sync error',
+ 'Se verifică…':'Checking…','Conectat și sincronizat.':'Connected and synced.','Completează toate cele trei câmpuri.':'Fill in all three fields.',
+ 'Repository-ul nu există sau token-ul nu are acces la el.':'The repository doesn’t exist or the token has no access to it.',
+ 'Token-ul nu are drept de scriere (Contents: Read and write).':'The token can’t write (Contents: Read and write).','Nu se poate contacta GitHub. Verifică internetul.':'Can’t reach GitHub. Check your connection.',
+ 'GitHub nu acceptă token-ul: probabil a fost șters, a expirat sau s-a copiat greșit o literă. Generează unul nou.':'GitHub rejected the token: it was probably deleted, expired, or a character was copied wrong. Generate a new one.',
+ 'Token-ul trebuie să înceapă cu „github_pat_”. Verifică dacă s-a copiat întreg.':'The token must start with “github_pat_”. Check it was copied completely.',
+ 'Fișierul nu este un backup valid.':'This file is not a valid backup.','Atenție':'Warning','OK':'OK',
+ 'Adaugă la Ziua mea ':'Add to My Day','Elimină din Ziua mea':'Remove from My Day','Marchează ca important':'Mark as important','Elimină importanța':'Remove importance',
+ 'Marchează ca finalizat':'Mark as completed','Marchează ca nefinalizat':'Mark as not completed','Scadent azi':'Due today','Scadent mâine':'Due tomorrow','Alege o dată…':'Pick a date…',
+ 'Elimină data':'Remove due date','Mută în…':'Move to…','Mută în':'Move to','Șterge elementul ':'Delete item','Mută în grup…':'Move to group…','Șterge grupul':'Delete group',
+ 'Redenumește grupul':'Rename group','Grup nou':'New group','Grup nou de liste':'New list group','Numele grupului (ex: Diverse)':'Group name (e.g. Misc)',
+ 'Listele se pun în grup din clic dreapta pe listă → „Mută în grup”, sau din opțiunile listei.':'Put lists in a group with right-click → “Move to group”, or from the list options.',
+ 'Grupul a fost șters; listele au rămas':'Group deleted; its lists were kept','Alege ziua și luna…':'Pick day and month…','Ascunde / arată bara laterală':'Hide / show sidebar',
+ 'Bara laterală':'Sidebar','Versiune nouă disponibilă':'New version available','Actualizează':'Update','Poza nu a putut fi citită':'The photo couldn’t be read',
+ 'Se repetă lunar':'Repeats monthly','Opțiuni':'Options','Element':'Item','Liste':'Lists'
+};
+const EN_RX = [
+ [/^(\d+) element rămas$/, '$1 item left'], [/^(\d+) elemente rămase$/, '$1 items left'],
+ [/^(\d+) element$/, '$1 item'], [/^(\d+) elemente$/, '$1 items'], [/^(\d+) din (\d+)$/, '$1 of $2'],
+ [/^Adaugă în (.+)$/, 'Add to $1'], [/^Sincronizat · (.+)$/, 'Synced · $1'], [/^Sincronizat$/, 'Synced'], [/^Statistici · (.+)$/, 'Statistics · $1'],
+ [/^Total (\d{4})$/, 'Total $1'], [/^sau în (.+)$/, 'or by $1'], [/^Creat (.+)$/, 'Created $1'],
+ [/^„(.+)” a fost șters$/, '“$1” was deleted'], [/^Lista „(.+)” a fost ștearsă$/, 'List “$1” was deleted'],
+ [/^Adăugată în Planificate: (.+), sau la (.+)$/, 'Added to Planned: $1, or at $2'],
+ [/^Nu am găsit „(.+)” în nicio listă\.$/, 'Couldn’t find “$1” in any list.'],
+ [/^Conectat, dar sincronizarea a eșuat: (.*)$/, 'Connected, but sync failed: $1'],
+ [/^Token-ul copiat are (\d+) caractere, iar unul complet are 93\. Copiază-l din nou, întreg\.$/, 'The pasted token has $1 characters; a complete one has 93. Copy it again in full.'],
+ [/^Poză: (.*)$/, 'Photo: $1']
+];
+function tr(str) {
+  const k = str.trim(); if (!k) return str;
+  if (EN[k]) return str.replace(k, EN[k]);
+  for (const [r, v] of EN_RX) if (r.test(k)) return str.replace(k, k.replace(r, v));
+  return str;
+}
+function translate(root) {
+  if (ui.lang !== 'en' || !root) return;
+  const skip = n => { for (let e = n.nodeType === 1 ? n : n.parentElement; e; e = e.parentElement) {
+    if (e.hasAttribute && (e.hasAttribute('data-u') || e.classList.contains('t') || e.classList.contains('nm') || e.classList.contains('lst') || e.tagName === 'TEXTAREA')) return true; }
+    return false; };
+  if (root.nodeType === 3) { if (!skip(root)) { const v = tr(root.nodeValue); if (v !== root.nodeValue) root.nodeValue = v; } return; }
+  if (root.nodeType !== 1) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+  const texts = []; while ((n = w.nextNode())) texts.push(n);
+  texts.forEach(t => { if (!skip(t)) { const v = tr(t.nodeValue); if (v !== t.nodeValue) t.nodeValue = v; } });
+  [root, ...root.querySelectorAll('[placeholder],[title],[aria-label]')].forEach(e => {
+    if (!e.getAttribute || skip(e)) return;
+    for (const a of ['placeholder', 'title', 'aria-label']) { const v = e.getAttribute(a); if (v) { const t2 = tr(v); if (t2 !== v) e.setAttribute(a, t2); } }
+  });
+}
+if (ui.lang === 'en') {
+  document.documentElement.lang = 'en';
+  new MutationObserver(ms => ms.forEach(m => { m.addedNodes.forEach(translate); if (m.type === 'characterData') translate(m.target); if (m.type === 'attributes') translate(m.target); }))
+    .observe(document.body, { childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['placeholder', 'title'] });
+}
+
 /* ---------- pornire ---------- */
 if (ui.startList && (isSmart(ui.startList) || (db.lists[ui.startList] && !db.lists[ui.startList].deleted))) ui.current = ui.startList;
 applyLook();
 render();
+translate(document.body);
 if (ui.current) document.body.classList.add('in-list');      // pe telefon se deschide direct ultima listă
 updateBar();
 setStatus(cfg.token ? 'ok' : 'local');
