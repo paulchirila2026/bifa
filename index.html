@@ -1427,7 +1427,7 @@ function openSettings() {
       <div class="fgroup">
         <label class="frow"><span class="fl">Utilizator</span><input id="sOwner" value="${esc(cfg.owner || '')}" placeholder="nume-utilizator" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
         <label class="frow"><span class="fl">Repository</span><input id="sRepo" value="${esc(cfg.repo || '')}" placeholder="bifa-date" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
-        <label class="frow"><span class="fl">Token</span><input id="sToken" type="password" value="${esc(cfg.token || '')}" placeholder="github_pat_…" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+        <label class="frow"><span class="fl">Token</span><input id="sToken" type="text" value="${esc(cfg.token || '')}" placeholder="github_pat_…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-1p-ignore data-lpignore="true" style="-webkit-text-security:disc"></label>
       </div>
       <div class="msg" id="sMsg"></div>
       <div class="fgroup">
@@ -1459,12 +1459,16 @@ function openSettings() {
       });
       s.querySelectorAll('[data-show]').forEach(c => c.onchange = () => { ui.show[c.dataset.show] = c.checked; saveUI(); applyLook(); render(); });
       q('#sConnect').onclick = async () => {
-        const c = { owner:q('#sOwner').value.trim(), repo:q('#sRepo').value.trim(), token:q('#sToken').value.trim() };
+        const clean = v => v.replace(/[\s\u200B-\u200D\u2060\uFEFF]/g, '');
+        const c = { owner:clean(q('#sOwner').value), repo:clean(q('#sRepo').value), token:clean(q('#sToken').value) };
+        if (c.token && !/^(github_pat_|ghp_)/.test(c.token)) return msg('Token-ul trebuie să înceapă cu „github_pat_”. Verifică dacă s-a copiat întreg.');
         if (!c.owner || !c.repo || !c.token) return msg('Completează toate cele trei câmpuri.');
         msg('Se verifică…', true);
         try {
           const r = await fetch(`https://api.github.com/repos/${encodeURIComponent(c.owner)}/${encodeURIComponent(c.repo)}`, { headers:ghHeaders(c.token), cache:'no-store' });
-          if (r.status === 401) return msg('Token invalid sau expirat.');
+          if (r.status === 401) return msg(c.token.length === 93 || c.token.startsWith('ghp_')
+            ? 'GitHub nu acceptă token-ul: probabil a fost șters, a expirat sau s-a copiat greșit o literă. Generează unul nou.'
+            : `Token-ul copiat are ${c.token.length} caractere, iar unul complet are 93. Copiază-l din nou, întreg.`);
           if (r.status === 404) return msg('Repository-ul nu există sau token-ul nu are acces la el.');
           if (!r.ok) return msg('Eroare GitHub: ' + r.status);
           const info = await r.json();
