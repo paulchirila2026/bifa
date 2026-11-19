@@ -463,14 +463,12 @@ svg{display:block;flex:none}
   <aside id="side">
     <div class="d-head d-only">
       <span class="d-logo"><svg width="26" height="26" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-<defs><linearGradient id="b0L" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3f47"/><stop offset="1" stop-color="#202328"/></linearGradient>
-<linearGradient id="b1L" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#22d38a"/><stop offset="1" stop-color="#a7ef4f"/></linearGradient>
-<linearGradient id="b3L" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0f12"/><stop offset="1" stop-color="#1b1e23"/></linearGradient></defs>
-<rect width="100" height="100" rx="24" fill="url(#b0L)"/>
-<rect x="27" y="31" width="44" height="44" rx="11" fill="url(#b3L)"/>
-<rect x="27" y="31" width="44" height="44" rx="11" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/>
-<path d="M38 50l11 11 28-32" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 2)"/>
-<path d="M38 50l11 11 28-32" fill="none" stroke="url(#b1L)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+<defs><linearGradient id="b0L" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262626"/><stop offset="1" stop-color="#0c0c0c"/></linearGradient>
+<linearGradient id="b1L" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#ff6a00"/><stop offset="1" stop-color="#ffb347"/></linearGradient>
+<filter id="b2L" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#ff7a1a" flood-opacity=".5"/></filter></defs>
+<rect width="100" height="100" rx="24" fill="url(#b0L)"/><rect x=".6" y=".6" width="98.8" height="98.8" rx="24" fill="none" stroke="#fff" stroke-opacity=".10" stroke-width="1.2"/>
+<path d="M58 30H38a10 10 0 0 0-10 10v22a10 10 0 0 0 10 10h22a10 10 0 0 0 10-10V55" fill="none" stroke="#5a5a5a" stroke-width="5" stroke-linecap="round"/>
+<path d="M38 50l11 11 28-32" fill="none" stroke="url(#b1L)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" filter="url(#b2L)"/></svg></span>
       <div class="d-app"><b>Bifa</b><span id="dToday"></span></div>
       <button class="fl-btn" id="btnSettings2" title="Setări" aria-label="Setări"></button>
     </div>
@@ -577,9 +575,10 @@ for (const id in SEED) {
   else if (!db.lists[id].updatedAt) Object.assign(db.lists[id], { icon:SEED[id].icon, color:SEED[id].color, kind:SEED[id].kind });
 }
 let cfg = load(LS_CFG) || {};
-let ui  = Object.assign({ current:null, mode:'system', theme:'green', bg:'soft', doneOpen:{}, groupOpen:{} }, load(LS_UI) || {});
+let ui  = Object.assign({ current:null, mode:'system', theme:'orange', bg:'soft', doneOpen:{}, groupOpen:{} }, load(LS_UI) || {});
 ui.show = Object.assign({ totals:true, counts:true, meta:true, done:true, smart:true, sync:true, compact:false, sound:true }, ui.show || {});
-if (!THEMES[ui.theme]) ui.theme = 'green';
+if (!THEMES[ui.theme]) ui.theme = 'orange';
+if (!ui.brand2) { ui.theme = 'orange'; ui.brand2 = 1; store(LS_UI, ui); }   // culoarea mărcii Bifa: portocaliu
 
 /* ---------- date ---------- */
 const liveLists = () => Object.values(db.lists).filter(l => !l.deleted)
