@@ -1,5 +1,5 @@
 // Păstrează aplicația disponibilă și fără internet. Cererile către GitHub nu trec prin cache.
-const CACHE = 'bifa-v32';
+const CACHE = 'bifa-v33';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './favicon.png', './fonts/inter-latin-wght-normal.woff2', './fonts/inter-latin-ext-wght-normal.woff2'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
