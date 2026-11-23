@@ -1,6 +1,6 @@
 // Pornire din copia de pe telefon (merge și fără internet sau pe Wi-Fi cu pagină de logare);
 // actualizarea se descarcă în fundal și se păstrează doar dacă e chiar aplicația.
-const CACHE = 'bifa-v44';
+const CACHE = 'bifa-v45';
 const MARK = 'apple-mobile-web-app-title';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './favicon.png', './fonts/inter-latin-wght-normal.woff2', './fonts/inter-latin-ext-wght-normal.woff2'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(() => {})); self.skipWaiting(); });
